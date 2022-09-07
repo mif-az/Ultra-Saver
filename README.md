@@ -1,3 +1,18 @@
-# SE-1
+## Setup
 
-> This is for the Software Engineering 1
+### Prerequisites
+
+- NodeJS
+
+### Client
+
+```bash
+cd client
+npm install
+```
+
+> For testing/development use:
+>
+> ```bash
+> npm run dev
+> ```
