@@ -21,18 +21,18 @@ public class UserInfoController : ControllerBase
     [Authorize] // This ensures that only the connections that pass a valid JWT token in the authentication header get here
     public IActionResult GetUserInfo()
     {
-        var email = ExtensionsService.getEmailFromClaim(HttpContext.User.Identity as ClaimsIdentity); // Get email from the JWT
+        var email = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim(); // Get email from the JWT
 
         if (email == null)
             return BadRequest("No email was provided");
 
-        var res = this._db.properties.Find(email); // Try to find users properties here
+        var res = this._db.Properties.Find(email); // Try to find users properties here
 
         if (res == null)
         {
             // If this user logged in for the first time - we call a service that initializes a new user in the database
             NewUserInitService.init(_db, email);
-            res = this._db.properties.Find(email);
+            res = this._db.Properties.Find(email);
         }
 
         return Ok(res);
@@ -42,7 +42,7 @@ public class UserInfoController : ControllerBase
     [Authorize]
     public IActionResult setUserInfo(UserPropsModel props)
     {
-        var email = ExtensionsService.getEmailFromClaim(identity: HttpContext.User.Identity as ClaimsIdentity); // Get email from the JWT
+        var email = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim(); // Get email from the JWT
 
         if (email == null)
             return BadRequest("No email was provided");
@@ -50,7 +50,7 @@ public class UserInfoController : ControllerBase
         if (!email.Equals(props.email))
             return BadRequest("Incorrect identity");
 
-        _db.properties.Update(props);
+        _db.Properties.Update(props);
 
         return Ok(_db.SaveChanges());
     }

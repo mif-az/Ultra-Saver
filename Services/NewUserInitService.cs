@@ -21,6 +21,6 @@ public static class NewUserInitService
         UserPropsModel props = new UserPropsModel();
         props.email = email;
 
-        db.properties.Add(props);
+        db.Properties.Add(props);
     }
 }

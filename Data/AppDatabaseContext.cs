@@ -10,7 +10,7 @@ public class AppDatabaseContext : DbContext
     {
     }
 
-    public DbSet<UserPropsModel> properties { get; set; } // UserProps table
+    public DbSet<UserPropsModel> Properties { get; set; } // UserProps table
     public DbSet<RecipeModel> Recipes { get; set; }
 
 
