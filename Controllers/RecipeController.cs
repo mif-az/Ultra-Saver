@@ -1,8 +1,7 @@
 
 
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -22,10 +21,20 @@ public class RecipeController : ControllerBase
 
     [HttpGet]
     [Authorize]
-    public IActionResult getRecipies(int page = 1) // Query parameter with default value
+    public IActionResult getRecipies(uint page = 1, string? filter = null) // Query parameter with default value
     {
-        // TODO implement filter functionality (will use regex)
-        return Ok(_db.Recipes.Skip((page - 1) * 10).Take(10)); //Should be a constant somewhere
+        if (page < 1)
+        {
+            return BadRequest();
+        }
+
+        if (filter != null)
+        {
+            string str = filter.map(letter => $".*?{Regex.Escape(letter.ToString().ToLower())}.*?");
+            return Ok(_db.Recipes.Where(c => Regex.IsMatch(c.Name.ToLower(), str)).Take(AppDatabaseContext.ItemsPerPage));
+        }
+
+        return Ok(_db.Recipes.Skip(((int)(page) - 1) * AppDatabaseContext.ItemsPerPage).Take(AppDatabaseContext.ItemsPerPage));
     }
 
     [HttpPost]

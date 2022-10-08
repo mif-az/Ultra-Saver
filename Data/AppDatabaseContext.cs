@@ -5,6 +5,7 @@ namespace Ultra_Saver;
 
 public class AppDatabaseContext : DbContext
 {
+    public static readonly int ItemsPerPage = 10;
 
     public AppDatabaseContext(DbContextOptions<AppDatabaseContext> options) : base(options)
     {

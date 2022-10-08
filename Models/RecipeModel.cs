@@ -11,4 +11,7 @@ public class RecipeModel
 
     [Required]
     public string Owner { get; set; }
+
+    [Required]
+    public string Name { get; set; } = null!;
 }
