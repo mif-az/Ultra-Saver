@@ -21,7 +21,7 @@ public class RecipeController : ControllerBase
 
     [HttpGet]
     [Authorize]
-    public IActionResult getRecipies(uint page = 1, string? filter = null) // Query parameter with default value
+    public IActionResult GetRecipies(uint page = 1, string? filter = null) // Query parameter with default value
     {
         if (page < 1)
         {
@@ -39,7 +39,7 @@ public class RecipeController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public IActionResult upsertRecipe(RecipeModel recipe) //For upserting we need the full model information (id can be ommited for creating a new recipe)
+    public IActionResult UpsertRecipe(RecipeModel recipe) //For upserting we need the full model information (id can be ommited for creating a new recipe)
     {
         var email = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim();
 
@@ -67,7 +67,7 @@ public class RecipeController : ControllerBase
 
     [HttpDelete]
     [Authorize]
-    public IActionResult deleteRecipe([FromBody] dynamic req) // We only need the id of the recipe
+    public IActionResult DeleteRecipe([FromBody] dynamic req) // We only need the id of the recipe
     {
         RecipeModel? recipe = null;
         dynamic data = JsonConvert.DeserializeObject<dynamic>(req.ToString());
