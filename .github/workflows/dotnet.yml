@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3.1.0
+    - name: Setup environment
+      run: dotnet user-secrets set "DB:User" "saver" && dotnet user-secrets set "DB:Name" "saver" && dotnet user-secrets set "DB:Password" "${{secrets.MASTER_DB_PASSWORD}}"
     - name: Warren - .NET Migrations
       uses: warrenbrasil/dotnet-migrations@v1
       with:
