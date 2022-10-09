@@ -1,4 +1,4 @@
-## [![Database](https://github.com/mif-az/Ultra-Saver/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/mif-az/Ultra-Saver/actions/workflows/dotnet.yml)
+[![Database](https://github.com/mif-az/Ultra-Saver/actions/workflows/dotnet.yml/badge.svg)](https://github.com/mif-az/Ultra-Saver/actions/workflows/dotnet.yml)
 
 <hr/>
 
