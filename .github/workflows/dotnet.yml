@@ -1,0 +1,21 @@
+name: Database
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  if_merged:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3.1.0
+    - name: Warren - .NET Migrations
+      uses: warrenbrasil/dotnet-migrations@v1
+      with:
+        project-path: ./
+        startup-project-path: ./
+        context: AppDatabaseContext
+        connection: ${{ secrets.MASTER_CONNECTION_STRING }}
