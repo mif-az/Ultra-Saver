@@ -1,3 +1,7 @@
+## [![Database](https://github.com/mif-az/Ultra-Saver/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/mif-az/Ultra-Saver/actions/workflows/dotnet.yml)
+
+<hr/>
+
 ## Setup
 
 ### Requirements
@@ -42,6 +46,6 @@ There is a high chance you will need info from a backend API route that requires
 1. Call any CRUD method you need:
    1. GET method: `authApi(user).get(<url>)`
    1. POST method (default behavior is upsert\*) `authApi(user).post(<url>, <body>)` It is important that `<body>` matches the database model
-   1. DELETE method `authApi(user).post(<url>, <body>, "DELETE")` Just as in the previous method, it is important that `<body>` matches the database model
+   1. DELETE method `authApi(user).post(<url>, <body>, "DELETE")` only the unique identifier fields are enough to provide in `<body>`. These fields can vary but the usual one is `"id"`
 
 > \*upsert: check if an entry with the unique identifier exists in the database -> if so, update with provided data; otherwise create a new entry in the database using provided data

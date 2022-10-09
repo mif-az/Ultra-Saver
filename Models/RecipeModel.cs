@@ -8,4 +8,10 @@ public class RecipeModel
     [Required]
     public int Minutes { get; set; }
     public int Wattage { get; set; }
+
+    [Required]
+    public string Owner { get; set; }
+
+    [Required]
+    public string Name { get; set; } = null!;
 }
