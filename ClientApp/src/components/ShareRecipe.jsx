@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form, FormGroup, Input, Label, Row, Col } from 'reactstrap';
+import { Button, Form, FormGroup, FormFeedback, Input, Label, Row, Col } from 'reactstrap';
 
 export default function ShareRecipe() {
   const [recipeTitle, setRecipeTitle] = useState('');
@@ -34,6 +34,11 @@ export default function ShareRecipe() {
     let tempIngredients = [...ingredients];
     tempIngredients = tempIngredients.filter((element) => ingredients.indexOf(element) !== index);
     setIngredients(tempIngredients);
+  };
+
+  const isNumber = (input) => {
+    console.log(typeof input);
+    return !Number.isNaN(+input); // isNaN returns true if the input is NOT a number, so we have to negate
   };
 
   return (
@@ -86,7 +91,9 @@ export default function ShareRecipe() {
                     id="exampleText"
                     onChange={(event) => handleFormChange(event, element)}
                     value={ingredients[index].ingredientAmount}
+                    invalid={!isNumber(ingredients[index].ingredientAmount)}
                   />
+                  <FormFeedback invalid>Your input has to be a number!</FormFeedback>
                 </FormGroup>
               </Col>
               {ingredients.length > 1 && (

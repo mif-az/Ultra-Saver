@@ -4,6 +4,7 @@ import Login from './components/Login';
 import UserProps from './components/UserProps';
 import ShareRecipe from './components/ShareRecipe';
 import EnergyCalculation from './components/EnergyCalculation';
+import AccountSettings from './components/AccountSettings';
 
 const AppRoutes = [
   {
@@ -25,6 +26,10 @@ const AppRoutes = [
   {
     path: '/sharerecipe',
     element: <ShareRecipe />
+  },
+  {
+    path: '/accountsettings',
+    element: <AccountSettings />
   }
 ];
 
