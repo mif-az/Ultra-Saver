@@ -19,9 +19,9 @@ export default function AccountSettings() {
 
   const isNumber = (input) => !Number.isNaN(+input); // isNaN returns true if the input is NOT a number, so we have to negate
   const isEmptyString = (str) => str.length === 0;
+  const capitalizeFirstLetter = (str) => str.substring(0, 1).toUpperCase() + str.substring(1);
 
   const isInputValid = () => {
-    console.log(inputValidity);
     if (!isNumber(electricityPrice)) {
       // check if it isn't already false to prevent infinite re-rendering
       if (inputValidity !== false) setInputValidity(false);
@@ -54,6 +54,11 @@ export default function AccountSettings() {
     setAppliances(tempAppliances);
   };
 
+  const handlePreferencesChange = (event, preference) => {
+    preferences[preference] = event.target.checked;
+    setPreferences(preferences);
+  };
+
   const addAppliance = () => {
     const tempAppliances = [...appliances];
     tempAppliances.push({ applianceName: '', applianceWattage: '' });
@@ -65,6 +70,19 @@ export default function AccountSettings() {
     tempAppliances = tempAppliances.filter((element) => appliances.indexOf(element) !== index);
     setAppliances(tempAppliances);
   };
+
+  const generatePreferenceCheckbox = (preference) => (
+    <FormGroup check inline>
+      <Label check>
+        <Input
+          type="checkbox"
+          onChange={(event) => handlePreferencesChange(event, preference)}
+          value={preferences[preference]}
+        />
+        {capitalizeFirstLetter(preference)}
+      </Label>
+    </FormGroup>
+  );
 
   useEffect(() => {
     isInputValid();
@@ -136,109 +154,7 @@ export default function AccountSettings() {
           +
         </Button>
         <div className="row">
-          <FormGroup check inline>
-            <Label check>
-              <Input
-                type="checkbox"
-                onChange={(event) =>
-                  setPreferences({ ...preferences, vegetarian: event.target.checked })
-                }
-                value={preferences.vegetarian}
-              />
-              Vegetarian
-            </Label>
-          </FormGroup>
-          <FormGroup check inline>
-            <Label check>
-              <Input
-                type="checkbox"
-                onChange={(event) =>
-                  setPreferences({ ...preferences, vegan: event.target.checked })
-                }
-                value={preferences.vegan}
-              />
-              Vegan
-            </Label>
-          </FormGroup>
-          <FormGroup check inline>
-            <Label check>
-              <Input
-                type="checkbox"
-                onChange={(event) =>
-                  setPreferences({ ...preferences, dairy: event.target.checked })
-                }
-                value={preferences.dairy}
-              />
-              Dairy Allergy
-            </Label>
-          </FormGroup>
-
-          <FormGroup check inline>
-            <Label check>
-              <Input
-                type="checkbox"
-                onChange={(event) => setPreferences({ ...preferences, eggs: event.target.checked })}
-                value={preferences.eggs}
-              />
-              Eggs Allergy
-            </Label>
-          </FormGroup>
-          <FormGroup check inline>
-            <Label check>
-              <Input
-                type="checkbox"
-                onChange={(event) => setPreferences({ ...preferences, fish: event.target.checked })}
-                value={preferences.fish}
-              />
-              Fish Allergy
-            </Label>
-          </FormGroup>
-          <FormGroup check inline>
-            <Label check>
-              <Input
-                type="checkbox"
-                onChange={(event) =>
-                  setPreferences({ ...preferences, shellfish: event.target.checked })
-                }
-                value={preferences.shellfish}
-              />
-              Shellfish Allergy
-            </Label>
-          </FormGroup>
-          <FormGroup check inline>
-            <Label check>
-              <Input
-                type="checkbox"
-                onChange={(event) => setPreferences({ ...preferences, nuts: event.target.checked })}
-                value={preferences.nuts}
-              />
-              Nuts allergy
-            </Label>
-          </FormGroup>
-          <FormGroup check inline>
-            <Label check>
-              <Input
-                type="checkbox"
-                onChange={(event) =>
-                  setPreferences({ ...preferences, wheat: event.target.checked })
-                }
-                value={preferences.wheat}
-              />
-              Wheat allergy
-            </Label>
-          </FormGroup>
-          <FormGroup check inline>
-            <Label check>
-              <Input
-                type="checkbox"
-                onChange={(event) =>
-                  setPreferences({ ...preferences, soybean: event.target.checked })
-                }
-                value={preferences.soybean}
-              />
-              Soybean allergy
-            </Label>
-          </FormGroup>
+          {Object.keys(preferences).map((preference) => generatePreferenceCheckbox(preference))}
         </div>
         <Button disabled={!inputValidity}>Submit</Button>
       </Form>
