@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form, FormGroup, FormFeedback, Input, Label, Row, Col } from 'reactstrap';
 
 export default function ShareRecipe() {
@@ -6,6 +6,36 @@ export default function ShareRecipe() {
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState([{ ingredientName: '', ingredientAmount: '' }]);
   const [instructions, setInstructions] = useState('');
+  const [inputValidity, setInputValidity] = useState(true);
+
+  const isNumber = (input) => !Number.isNaN(+input); // isNaN returns true if the input is NOT a number, so we have to negate
+  const isEmptyString = (str) => str.length === 0;
+
+  const isInputValid = () => {
+    console.log(inputValidity);
+    if (isEmptyString(recipeTitle)) {
+      // check if it isn't already false to prevent infinite re-rendering
+      if (inputValidity !== false) setInputValidity(false);
+      return false;
+    }
+
+    if (isEmptyString(description)) {
+      // check if it isn't already false to prevent infinite re-rendering
+      if (inputValidity !== false) setInputValidity(false);
+      return false;
+    }
+
+    for (let i = 0; i < ingredients.length; i += 1) {
+      const ingredient = ingredients[i];
+      if (!isNumber(ingredient.ingredientAmount) || isEmptyString(ingredient.ingredientName)) {
+        if (inputValidity !== false) setInputValidity(false);
+        return false;
+      }
+    }
+
+    if (inputValidity !== true) setInputValidity(true);
+    return true;
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault(); // prevents page refresh
@@ -36,10 +66,9 @@ export default function ShareRecipe() {
     setIngredients(tempIngredients);
   };
 
-  const isNumber = (input) => {
-    console.log(typeof input);
-    return !Number.isNaN(+input); // isNaN returns true if the input is NOT a number, so we have to negate
-  };
+  useEffect(() => {
+    isInputValid();
+  });
 
   return (
     <>
@@ -52,7 +81,9 @@ export default function ShareRecipe() {
             id="recipeName"
             onChange={(event) => setRecipeTitle(event.target.value)}
             value={recipeTitle}
+            invalid={isEmptyString(recipeTitle)}
           />
+          <FormFeedback invalid>Your recipe must have a name!</FormFeedback>
         </FormGroup>
         <FormGroup>
           <Label sm={2}>Short Recipe Description</Label>
@@ -62,7 +93,9 @@ export default function ShareRecipe() {
             id="description"
             onChange={(event) => setDescription(event.target.value)}
             value={description}
+            invalid={isEmptyString(description)}
           />
+          <FormFeedback invalid>Your recipe must have a description!</FormFeedback>
         </FormGroup>
         <Label>Ingredients</Label>
         {ingredients.map((element, index) => (
@@ -79,7 +112,9 @@ export default function ShareRecipe() {
                     id="exampleText"
                     onChange={(event) => handleFormChange(event, element)}
                     value={ingredients[index].ingredientName}
+                    invalid={isEmptyString(ingredients[index].ingredientName)}
                   />
+                  <FormFeedback invalid>Your ingredient must have a name!</FormFeedback>
                 </FormGroup>
               </Col>
               <Col>
@@ -120,9 +155,11 @@ export default function ShareRecipe() {
             id="exampleText"
             onChange={(event) => setInstructions(event.target.value)}
             value={instructions}
+            invalid={isEmptyString(instructions)}
           />
+          <FormFeedback invalid>Your recipe must have instructions!</FormFeedback>
         </FormGroup>
-        <Button>Submit</Button>
+        <Button disabled={!inputValidity}>Submit</Button>
       </Form>
     </>
   );

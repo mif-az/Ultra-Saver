@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form, FormGroup, FormFeedback, Input, Label, Row, Col } from 'reactstrap';
 
 export default function AccountSettings() {
   const [electricityPrice, setElectricityPrice] = useState('');
   const [appliances, setAppliances] = useState([{ applianceName: '', applianceWattage: '' }]);
+  const [inputValidity, setInputValidity] = useState(true);
   const [preferences, setPreferences] = useState({
     vegetarian: false,
     vegan: false,
@@ -17,6 +18,28 @@ export default function AccountSettings() {
   });
 
   const isNumber = (input) => !Number.isNaN(+input); // isNaN returns true if the input is NOT a number, so we have to negate
+  const isEmptyString = (str) => str.length === 0;
+
+  const isInputValid = () => {
+    console.log(inputValidity);
+    if (!isNumber(electricityPrice)) {
+      // check if it isn't already false to prevent infinite re-rendering
+      if (inputValidity !== false) setInputValidity(false);
+      return false;
+    }
+
+    for (let i = 0; i < appliances.length; i += 1) {
+      const appliance = appliances[i];
+      if (!isNumber(appliance.applianceWattage) || isEmptyString(appliance.applianceName)) {
+        if (inputValidity !== false) setInputValidity(false);
+        return false;
+      }
+    }
+
+    if (inputValidity !== true) setInputValidity(true);
+    return true;
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault(); // prevents page refresh
     console.log(electricityPrice);
@@ -42,6 +65,10 @@ export default function AccountSettings() {
     tempAppliances = tempAppliances.filter((element) => appliances.indexOf(element) !== index);
     setAppliances(tempAppliances);
   };
+
+  useEffect(() => {
+    isInputValid();
+  });
 
   return (
     <>
@@ -73,7 +100,9 @@ export default function AccountSettings() {
                     id="applianceName"
                     onChange={(event) => handleFormChange(event, element)}
                     value={appliances[index].applianceName}
+                    invalid={isEmptyString(appliances[index].applianceName)}
                   />
+                  <FormFeedback invalid>The appliance has to have a name!</FormFeedback>
                 </FormGroup>
               </Col>
               <Col>
@@ -211,7 +240,7 @@ export default function AccountSettings() {
             </Label>
           </FormGroup>
         </div>
-        <Button>Submit</Button>
+        <Button disabled={!inputValidity}>Submit</Button>
       </Form>
     </>
   );
