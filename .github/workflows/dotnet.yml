@@ -1,0 +1,24 @@
+name: Database
+
+on:
+  pull_request:
+    types:
+      - closed
+  workflow_dispatch:
+
+jobs:
+  if_merged:
+    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3.1.0
+    - name: Setup environment
+      run: dotnet user-secrets set "DB:User" "saver" && dotnet user-secrets set "DB:Name" "saver" && dotnet user-secrets set "DB:Password" "${{ secrets.MASTER_DB_PASSWORD }}"
+    - name: Warren - .NET Migrations
+      uses: warrenbrasil/dotnet-migrations@v1
+      with:
+        project-path: ./
+        startup-project-path: ./
+        context: AppDatabaseContext
+        connection: ${{ secrets.MASTER_CONNECTION_STRING }}

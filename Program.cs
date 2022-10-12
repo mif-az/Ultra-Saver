@@ -15,7 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDatabaseContext>(
     o =>
     {
-        var conectionString = builder.Configuration.GetConnectionString("db") + ";Password=" + builder.Configuration["DB:Password"];
+        var conectionString = builder.Configuration.GetConnectionString("db") + $";Database={builder.Configuration["DB:Name"]};User Id={builder.Configuration["DB:User"]};Password={builder.Configuration["DB:Password"]}";
         o.UseNpgsql(conectionString);
     }
 );
