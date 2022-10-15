@@ -4,6 +4,8 @@ using System.Security.Claims;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
 namespace Ultra_Saver;
@@ -41,11 +43,12 @@ public class RecipeController : ControllerBase
     [Authorize]
     public IActionResult UpsertRecipe(RecipeModel recipe) //For upserting we need the full model information (id can be ommited for creating a new recipe)
     {
-        var email = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim();
+        recipe.Owner = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim() ?? recipe.Owner; // Set recipe owner to current user
 
-        if (recipe.Owner.Equals((HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim()))
+        if ((from r in _db.Recipes
+             where r.Id == recipe.Id
+             select r).AsNoTracking().First()?.Equals(recipe) ?? true) // Check if signatures of the object in db and provided object match (if recipe exists in db)
         {
-
             try
             {
                 _db.Recipes.Update(recipe);

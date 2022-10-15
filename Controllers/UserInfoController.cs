@@ -31,7 +31,7 @@ public class UserInfoController : ControllerBase
         if (res == null)
         {
             // If this user logged in for the first time - we call a service that initializes a new user in the database
-            NewUserInitService.init(_db, email);
+            NewUserInitService.init(db: _db, email: email);
             res = this._db.Properties.Find(email);
         }
 
