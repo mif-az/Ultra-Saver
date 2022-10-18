@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace Ultra_Saver;
-public class RecipeModel
+public class RecipeModel : Model<string>
 {
+
     public int Id { get; set; }
 
     [Required]
@@ -14,4 +15,9 @@ public class RecipeModel
 
     [Required]
     public string Name { get; set; } = null!;
+
+    public override string GetSignature()
+    {
+        return $"{this.Id}_{this.Owner}";
+    }
 }

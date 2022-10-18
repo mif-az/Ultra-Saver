@@ -3,6 +3,7 @@ import { Home } from './components/Home';
 import Login from './components/Login';
 import UserProps from './components/UserProps';
 import ShareRecipe from './components/ShareRecipe';
+import SearchRecipe from './components/SearchRecipe';
 import EnergyCalculation from './components/EnergyCalculation';
 import AccountSettings from './components/AccountSettings';
 
@@ -26,6 +27,10 @@ const AppRoutes = [
   {
     path: '/sharerecipe',
     element: <ShareRecipe />
+  },
+  {
+    path: '/searchrecipe',
+    element: <SearchRecipe />
   },
   {
     path: '/accountsettings',

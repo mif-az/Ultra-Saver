@@ -45,7 +45,7 @@ namespace Ultra_Saver.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Recipes");
+                    b.ToTable("Recipes", (string)null);
                 });
 
             modelBuilder.Entity("UltraSaver.UserPropsModel", b =>
@@ -58,7 +58,7 @@ namespace Ultra_Saver.Migrations
 
                     b.HasKey("email");
 
-                    b.ToTable("Properties");
+                    b.ToTable("Properties", (string)null);
                 });
 #pragma warning restore 612, 618
         }
