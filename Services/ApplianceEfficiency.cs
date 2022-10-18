@@ -2,8 +2,8 @@ namespace Ultra_Saver;
 struct ApplianceEfficiency
 {
     public ApplianceEfficiency() { }
-    public static float GetEfficiency(ApplianceType type){
-        switch(type){
+    public static float GetEfficiency(ApplianceType Type){
+        switch(Type){
             case ApplianceType.GAS_STOVE: return 0.4f;
             case ApplianceType.INDUCTION_STOVE: return 0.84f;
             case ApplianceType.ELECTRIC_COIL_STOVE: return 0.74f;
