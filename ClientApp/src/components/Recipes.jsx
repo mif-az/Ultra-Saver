@@ -17,7 +17,7 @@ export default function Welcome() {
         <DropdownItem tag={Link} to="/sharerecipe" className="text-dark">
           Share Recipe
         </DropdownItem>
-        <DropdownItem tag={Link} to="/sharerecipe" className="text-dark">
+        <DropdownItem tag={Link} to="/searchrecipe" className="text-dark">
           Search Recipes
         </DropdownItem>
       </DropdownMenu>
