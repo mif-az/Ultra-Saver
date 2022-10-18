@@ -4,7 +4,12 @@ import { authApi, UserContext } from '../contexts/UserProvider';
 
 export default function SearchRecipe() {
   const [recipes, setRecipes] = useState([]);
-  // const [priceFilter, setPriceFilter] = useState();
+  const [query, setQuery] = useState();
+  const [sortOption, setSortOption] = useState();
+  const [filterOptions, setFilterOptions] = useState({
+    wattage: '',
+    minutes: ''
+  });
   const [user] = useContext(UserContext);
 
   const sortOptions = [
@@ -22,39 +27,52 @@ export default function SearchRecipe() {
     }
   ];
 
-  async function fetchData(query) {
-    const response = await authApi(user).get(`recipe?filter=${query}`);
+  async function fetchData(q) {
+    const response = await authApi(user).get(`recipe?filter=${q}`);
     const data = await response.json();
-    console.log('data :>> ', data);
     return data;
   }
 
-  async function handleSearchChange(query) {
-    const data = await fetchData(query);
-    setRecipes(data);
-  }
-
   // sorts recipes by given property in descending order
-  const sortData = (data, sortOption) => {
-    console.log('sorting');
+  const sortData = (data, option) => {
     const sortedData = [...data];
-    sortedData.sort((a, b) => (a[sortOption] > b[sortOption] ? 1 : -1));
+    sortedData.sort((a, b) => (a[option] > b[option] ? 1 : -1));
     return sortedData;
   };
 
   const filterData = (data, filterOption, filterValue) => {
-    console.log(`filtering${filterValue}`);
-    console.log(data);
+    if (filterValue === '') return data;
     const filteredData = data.filter((recipe) => recipe[filterOption] < filterValue);
     return filteredData;
   };
 
-  // async function handleFilterChange(query) {
-  //   const data = await fetchData(query);
-  //   filter;
-  //   setRecipes(data);
-  // }
+  const updateAndSetRecipes = (d, sort, filters) => {
+    let data = d;
+    data = filterData(data, 'wattage', filters.wattage); // should implement more automated way of doing this later
+    data = filterData(data, 'minutes', filters.minutes);
+    data = sortData(data, sort);
 
+    setRecipes(data);
+  };
+
+  async function handleSearchChange(q) {
+    const data = await fetchData(q);
+    setQuery(q);
+    updateAndSetRecipes(data, sortOption, filterOptions);
+  }
+
+  async function handleSortChange(q) {
+    await setSortOption(q);
+    updateAndSetRecipes(recipes, q, filterOptions);
+  }
+
+  async function handleFilterChange(option, value) {
+    const tempFilters = filterOptions;
+    tempFilters[option] = value;
+    setFilterOptions(tempFilters);
+    const data = await fetchData(query);
+    updateAndSetRecipes(data, sortOption, tempFilters);
+  }
   // Call fetch data on first render to not have an empty list on start
   useEffect(() => {
     const initialFetchData = async () => {
@@ -83,7 +101,7 @@ export default function SearchRecipe() {
             type="select"
             name="select"
             onChange={(e) => {
-              setRecipes(sortData(recipes, e.target.value));
+              handleSortChange(e.target.value);
             }}>
             {sortOptions.map((option) => (
               <option value={option.value}>{option.label}</option>
@@ -96,7 +114,16 @@ export default function SearchRecipe() {
             <Input
               type="text"
               onChange={(e) => {
-                setRecipes(filterData(recipes, 'wattage', e.target.value));
+                handleFilterChange('wattage', e.target.value);
+              }}
+            />
+          </div>
+          <div className="col">
+            <Label>Time filter</Label>
+            <Input
+              type="text"
+              onChange={(e) => {
+                handleFilterChange('minutes', e.target.value);
               }}
             />
           </div>
@@ -107,7 +134,7 @@ export default function SearchRecipe() {
           <div className="row border-2 mt-1 bg-dark text-white rounded-1 p-2" key={el.id}>
             <div className="col-5">
               <div className="fw-bold">{el.name}</div>
-              <p>Takes {el.minutes} minutes to make</p>
+              <p>~{el.minutes} minutes to make</p>
               <p>Short description here (which we dont have)</p>
             </div>
             <div className="col-6">
