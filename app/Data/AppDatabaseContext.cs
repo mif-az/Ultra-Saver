@@ -3,6 +3,7 @@ using UltraSaver;
 
 namespace Ultra_Saver;
 
+
 public class AppDatabaseContext : DbContext
 {
     public static readonly int ItemsPerPage = 10;
@@ -11,8 +12,8 @@ public class AppDatabaseContext : DbContext
     {
     }
 
-    public DbSet<UserPropsModel> Properties { get; set; } // UserProps table
-    public DbSet<RecipeModel> Recipes { get; set; }
+    public DbSet<UserPropsModel> Properties { get; set; } = null!; // UserProps table
+    public DbSet<RecipeModel> Recipes { get; set; } = null!;
 
 
 }

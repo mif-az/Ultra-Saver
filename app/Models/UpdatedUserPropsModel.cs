@@ -12,9 +12,9 @@ public class UpdatedUserPropsModel : Model<string>
 
     public bool darkMode { get; set; } = false;
 
-    public List<String> favorites { get; set; } // shows dishes that a User marked as favorite/saved
+    public List<String>? favorites { get; set; } // shows dishes that a User marked as favorite/saved
 
-    public List<String> followed { get; set; } // shows accounts that a User follows
+    public List<String>? followed { get; set; } // shows accounts that a User follows
 
     public override string GetSignature()
     {

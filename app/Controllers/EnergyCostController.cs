@@ -17,6 +17,10 @@ public class EnergyCostController : ControllerBase
     public IActionResult CalculateEnergyCost()
     {
         var res = _db.Recipes.Find(1);
+        if (res == null)
+        {
+            return StatusCode(500);
+        }
 
         return Ok(CalculateKiloWattHours(res.Minutes, res.Wattage) * 2); //ignitis standartas 
     }
@@ -26,7 +30,7 @@ public class EnergyCostController : ControllerBase
         float kw = wattage / 1000;
         float hours = minutes / 60;
 
-        return kw / hours; 
+        return kw / hours;
     }
 }
 // 30 9999

@@ -11,7 +11,7 @@ public class RecipeModel : Model<string>
     public int Wattage { get; set; }
 
     [Required]
-    public string Owner { get; set; }
+    public string Owner { get; set; } = null!;
 
     [Required]
     public string Name { get; set; } = null!;
