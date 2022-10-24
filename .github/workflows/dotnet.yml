@@ -20,7 +20,7 @@ jobs:
     - name: Warren - .NET Migrations
       uses: warrenbrasil/dotnet-migrations@v1
       with:
-        project-path: ./
-        startup-project-path: ./
+        project-path: ./app
+        startup-project-path: ./app
         context: AppDatabaseContext
         connection: ${{ secrets.MASTER_CONNECTION_STRING }}
