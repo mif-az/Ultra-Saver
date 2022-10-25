@@ -4,7 +4,7 @@ import { authApi, UserContext } from '../contexts/UserProvider';
 
 export default function SearchRecipe() {
   const [recipes, setRecipes] = useState([]);
-  const [query, setQuery] = useState();
+  const [query, setQuery] = useState('');
   const [sortOption, setSortOption] = useState();
   const [filterOptions, setFilterOptions] = useState({
     wattage: '',
