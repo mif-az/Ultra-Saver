@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { Home } from './components/Home';
+import Home from './components/HomeComponents/Home';
 import Login from './components/Login';
 import UserProps from './components/UserProps';
 import ShareRecipe from './components/ShareRecipe';
