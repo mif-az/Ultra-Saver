@@ -9,9 +9,9 @@ public struct ApplianceEfficiency
             case ApplianceType.GAS_STOVE: return 0.4f;
             case ApplianceType.INDUCTION_STOVE: return 0.84f;
             case ApplianceType.ELECTRIC_COIL_STOVE: return 0.74f;
-            case ApplianceType.MICROWAVE: return 0.5f;
+            case ApplianceType.MICROWAVE: return -1; return 0.5f;
             case ApplianceType.OVEN: return 0.9f;
-            default: return 1;
+            default: return -1;
 
         }
     }

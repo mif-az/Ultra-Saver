@@ -1,3 +1,4 @@
+using System;
 using Ultra_Saver;
 using Xunit;
 
@@ -10,5 +11,14 @@ public class DemoTest
     {
         Assert.Equal(0.9f, Ultra_Saver.ApplianceEfficiency.GetEfficiency(ApplianceType.OVEN));
 
+    }
+
+    [Fact]
+    public void AllApliancesHaveEfficiency()
+    {
+        foreach (ApplianceType appliance in Enum.GetValues(typeof(ApplianceType)))
+        {
+            Assert.NotEqual(-1, ApplianceEfficiency.GetEfficiency(appliance));
+        }
     }
 }
