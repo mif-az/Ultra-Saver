@@ -40,10 +40,10 @@ public struct EnergyCostAlgorithm
     {
         // If the recipe requires heating a pan
         // considering heating pan is for approximately 2 minutes
-        TotalEnergy += AppliancePower * 120 / ConvertTokWh / ApplianceEfficiency.GetEfficiency(Type);
+        TotalEnergy += AppliancePower * 120 / 1000 / ApplianceEfficiency.GetEfficiency(Type);
     }
 
-    public void BoilingWater(short WaterVolume, ApplianceType Type)
+    public void BoilingWater(float WaterVolume, ApplianceType Type)
     {
         TotalEnergy += WaterToBoilHeat * WaterVolume / ConvertTokWh / ApplianceEfficiency.GetEfficiency(Type);
     }
