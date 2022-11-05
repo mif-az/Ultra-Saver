@@ -8,15 +8,21 @@ const target = env.ASPNETCORE_HTTPS_PORT
   ? env.ASPNETCORE_URLS.split(';')[0]
   : 'http://localhost:21932';
 
-const context = ['/userinfo', '/fetchlogindata', '/energycost', '/recipe'];
+const context = [
+  '/userinfo',
+  '/fetchlogindata',
+  '/energycost',
+  '/recipe',
+  '/chat/send',
+  '/chat/messages'
+];
 
 module.exports = function (app) {
   const appProxy = createProxyMiddleware(context, {
     target,
-    secure: false,
-    headers: {
-      Connection: 'Keep-Alive'
-    }
+    ws: true,
+    changeOrigin: true,
+    secure: false
   });
 
   app.use(appProxy);
