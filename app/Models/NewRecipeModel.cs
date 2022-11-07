@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace UltraSaver;
+namespace Ultra_Saver;
 
-public class NewRecipeModel
+public class NewRecipeModel : Model<string>
 {
     [Key]
     public int Id { get; set; }
@@ -23,4 +23,9 @@ public class NewRecipeModel
     public ICollection<UserLikedRecipeModel> UserLikedRecipe { get; set; } = null!;
 
     public ICollection<RecipeIngredientModel> RecipeIngredient { get; set; } = null!;
+
+    public override string GetSignature()
+    {
+        return $"{this.Id}_{this.Owner}";
+    }
 }
