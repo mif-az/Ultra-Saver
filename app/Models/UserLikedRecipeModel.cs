@@ -13,5 +13,5 @@ public class UserLikedRecipeModel
 
     public UserModel User { get; set; } = null!;
 
-    public NewRecipeModel Recipe { get; set; } = null!;
+    public RecipeModel Recipe { get; set; } = null!;
 }
