@@ -4,7 +4,7 @@
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { React, useContext, useEffect, useState } from 'react';
 import { authApi, UserContext } from '../contexts/UserProvider';
-import URL from '../../appUrl';
+import URL from '../appUrl';
 
 export default function ChatExample() {
   const [user] = useContext(UserContext);

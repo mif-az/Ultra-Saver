@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect, useState } from 'react';
 import { authApi, UserContext } from '../contexts/UserProvider';
-import URL from '../../appUrl';
+import URL from '../appUrl';
 
 export default function UserProps() {
   const [user] = useContext(UserContext);

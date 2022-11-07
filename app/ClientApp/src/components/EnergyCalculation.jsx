@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import URL from '../../appUrl';
+import URL from '../appUrl';
 
 export default function EnergyCalculation() {
   const [cost, setCost] = useState([]);

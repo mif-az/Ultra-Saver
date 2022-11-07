@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Input, Label } from 'reactstrap';
 import { authApi, UserContext } from '../contexts/UserProvider';
-import URL from '../../appUrl';
+import URL from '../appUrl';
 
 export default function SearchRecipe() {
   const [recipes, setRecipes] = useState([]);
