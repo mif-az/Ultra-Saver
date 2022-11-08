@@ -45,9 +45,6 @@ export default function ShareRecipe() {
     console.log(instructions);
     console.log(JSON.stringify(ingredients));
     const recipeModel = {
-      // id: 4, // Math.floor(Math.random() * 100), // using random id for now
-      // id: ,
-      id: 9,
       owner: user.email,
       instruction: instructions,
       name: recipeTitle,
