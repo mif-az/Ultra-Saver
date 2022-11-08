@@ -29,6 +29,8 @@ jobs:
     - name: Setup Prod backend URL
       run: printf "const URL = '${{ secrets.URL }}';\nexport default URL;\n" > ./app/ClientApp/src/appUrl.js
     - name: Publish to directory
+      env:
+        CI: false
       run: dotnet publish -o ~/saver
     - name: Stop running service
       uses: fifsky/ssh-action@v0.0.6
