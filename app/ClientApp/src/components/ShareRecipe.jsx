@@ -51,7 +51,7 @@ export default function ShareRecipe() {
       owner: user.email,
       instruction: instructions,
       name: recipeTitle,
-      calorieCount: 1000,
+      calorieCount: 1000, // Calories and full preptime will later be calculated from all the ingredients
       fullPrepTime: 1000,
       recipeIngredient: [],
       userLikedRecipe: []
