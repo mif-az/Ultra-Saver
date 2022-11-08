@@ -32,14 +32,6 @@ jobs:
       env:
         CI: false
       run: dotnet publish -o ~/saver
-    - name: Stop running service
-      uses: fifsky/ssh-action@v0.0.6
-      with:
-        command: sudo service saver stop
-        host: ${{ secrets.HOST }}
-        user: ${{ secrets.USER }}
-        port: ${{ secrets.PORT }}
-        key: ${{ secrets.KEY }}
     - name: SFTP Deploy
       uses: wlixcc/SFTP-Deploy-Action@v1.2.4
       with:
@@ -51,12 +43,4 @@ jobs:
         remote_path: /opt/saver
         sftp_only: true
         delete_remote_files: false
-    - name: Start service
-      uses: fifsky/ssh-action@v0.0.6
-      with:
-        command: sudo service saver start
-        host: ${{ secrets.HOST }}
-        user: ${{ secrets.USER }}
-        port: ${{ secrets.PORT }}
-        key: ${{ secrets.KEY }}
       
