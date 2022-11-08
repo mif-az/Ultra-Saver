@@ -47,7 +47,7 @@ public class RecipeController : ControllerBase
 
         if ((from r in _db.Recipes
              where r.Id == recipe.Id
-             select r).AsNoTracking().First()?.Equals(recipe) ?? true) // Check if signatures of the object in db and provided object match (if recipe exists in db)
+             select r).AsNoTracking().FirstOrDefault()?.Equals(recipe) ?? true) // Check if signatures of the object in db and provided object match (if recipe exists in db)
         {
             try
             {

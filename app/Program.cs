@@ -38,7 +38,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 // app.UseStaticFiles();
 
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:44462", "https://localhost:44462", "http://localhost", "https://localhost"));
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://usaver.ddns.net:3477", "https://localhost:44462"));
 
 app.UseRouting();
 
