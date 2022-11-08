@@ -25,7 +25,7 @@ jobs:
         context: AppDatabaseContext
         connection: ${{ secrets.MASTER_CONNECTION_STRING }}
     - name: Setup Prod backend URL
-      run: echo "const URL = '${{ secrets.URL }}';export default URL;" > ./app/ClientApp/src/appUrl.js
+      run: printf "const URL = '${{ secrets.URL }}';\nexport default URL;" > ./app/ClientApp/src/appUrl.js
     - name: Publish to directory
       run: dotnet publish -o ~/saver
     - name: Stop running service
