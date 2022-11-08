@@ -73,4 +73,6 @@ public class AppDatabaseContext : DbContext
     public DbSet<UserOwnedApplianceModel> UserOwnedAppliance { get; set; } = null!;
 
     public DbSet<RecipeIngredientModel> RecipeIngredient { get; set; } = null!;
+
+    public DbSet<ChatMessageModel> ChatMessage { get; set; } = null!;
 }

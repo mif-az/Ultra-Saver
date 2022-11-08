@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Input, Label } from 'reactstrap';
 import { authApi, UserContext } from '../contexts/UserProvider';
+import URL from '../appUrl';
 
 export default function SearchRecipe() {
   const [recipes, setRecipes] = useState([]);
@@ -28,7 +29,7 @@ export default function SearchRecipe() {
   ];
 
   async function fetchData(q) {
-    const response = await authApi(user).get(`recipe?filter=${q}`);
+    const response = await authApi(user).get(`${URL}/recipe?filter=${q}`);
     const data = await response.json();
     console.log(data);
     return data;
