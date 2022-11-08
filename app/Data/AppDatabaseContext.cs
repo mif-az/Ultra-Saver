@@ -23,7 +23,7 @@ public class AppDatabaseContext : DbContext
             .HasForeignKey<AllergensModel>(b => b.Email);
 
         modelBuilder.Entity<UserLikedRecipeModel>()
-       .HasKey(ab => new {ab.Id });
+       .HasKey(ab => new { ab.Id });
 
         modelBuilder.Entity<UserLikedRecipeModel>()
             .HasOne(ab => ab.User)
@@ -69,9 +69,11 @@ public class AppDatabaseContext : DbContext
 
     public DbSet<AllergensModel> Allergens { get; set; } = null!;
 
-    public DbSet<UserLikedRecipeModel> UserLikedRecipe { get; set; } = null!; 
+    public DbSet<UserLikedRecipeModel> UserLikedRecipe { get; set; } = null!;
 
     public DbSet<UserOwnedApplianceModel> UserOwnedAppliance { get; set; } = null!;
 
     public DbSet<RecipeIngredientModel> RecipeIngredient { get; set; } = null!;
+
+    public DbSet<ChatMessageModel> ChatMessage { get; set; } = null!;
 }
