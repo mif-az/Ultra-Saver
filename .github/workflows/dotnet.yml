@@ -9,6 +9,8 @@ on:
 jobs:
   conditional_job:
     if: ${{ !startsWith(github.event.head_commit.message,'%no-action%') || github.event_name == 'workflow_dispatch' }}
+    environment:
+      name: dev
     runs-on: ubuntu-latest
     steps:
     - name: Head commit message
@@ -25,7 +27,7 @@ jobs:
         context: AppDatabaseContext
         connection: ${{ secrets.MASTER_CONNECTION_STRING }}
     - name: Setup Prod backend URL
-      run: printf "const URL = '${{ secrets.URL }}';\nexport default URL;" > ./app/ClientApp/src/appUrl.js
+      run: printf "const URL = '${{ secrets.URL }}';\nexport default URL;\n" > ./app/ClientApp/src/appUrl.js
     - name: Publish to directory
       run: dotnet publish -o ~/saver
     - name: Stop running service
