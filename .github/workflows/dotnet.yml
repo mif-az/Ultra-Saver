@@ -31,7 +31,7 @@ jobs:
     - name: Publish to directory
       env:
         CI: false
-      run: dotnet publish -o ~/saver
+      run: dotnet publish -o ./saver
     - name: SFTP Deploy
       uses: wlixcc/SFTP-Deploy-Action@v1.2.4
       with:
@@ -39,7 +39,7 @@ jobs:
         server: ${{ secrets.SERVER }}
         port: ${{ secrets.PORT }}
         ssh_private_key: ${{ secrets.KEY }}
-        local_path: ~/saver
+        local_path: ./saver
         remote_path: /opt/saver
         sftp_only: true
         delete_remote_files: false
