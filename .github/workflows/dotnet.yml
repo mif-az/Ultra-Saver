@@ -32,6 +32,8 @@ jobs:
       env:
         CI: false
       run: dotnet publish -o ./saver
+    - name: Setup DB Connection
+      run: printf "${{ secrets.MASTER_DB_PASSWORD }}" > ./saver/creds
     - name: SFTP Deploy
       uses: wlixcc/SFTP-Deploy-Action@v1.2.4
       with:
@@ -40,7 +42,7 @@ jobs:
         port: ${{ secrets.PORT }}
         ssh_private_key: ${{ secrets.KEY }}
         local_path: ./saver
-        remote_path: /opt/saver
+        remote_path: /opt/saver/app
         sftp_only: true
         delete_remote_files: true
       
