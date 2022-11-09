@@ -1,17 +1,20 @@
-import React from 'react';
-import MessageBox from './MessageBox';
+/* eslint-disable react/prop-types */
+import React, { useContext } from 'react';
+import { UserContext } from '../contexts/UserProvider';
 
-document.getElementById('NAME').innerHTML = 'Name';
-const date = new Date();
-document.getElementById('DATE').innerHTML = date.getHours();
-document.getElementById('TEXT').innerHTML = 'labas';
-
-export default function MesageProps() {
+export default function MesageProps(props) {
+  const [user] = useContext(UserContext);
+  const { text } = props;
+  const date = new Date();
   return (
     <div>
-      <h3 id="NAME"> </h3>
-      <p id="DATE"> </p>
-      <p id="TEXT"> </p>
+      <h3 id="NAME"> {user.name} </h3>
+      <p id="DATE">
+        Date: {date.getDate()}-{date.getMonth()}
+        <br />
+        Time: {date.getHours()}:{date.getMinutes()}
+      </p>
+      <p> {text} </p>
     </div>
   );
 }

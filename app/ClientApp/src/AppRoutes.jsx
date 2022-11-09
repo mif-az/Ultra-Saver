@@ -6,6 +6,7 @@ import ShareRecipe from './components/ShareRecipe';
 import SearchRecipe from './components/SearchRecipe';
 import EnergyCalculation from './components/EnergyCalculation';
 import AccountSettings from './components/AccountSettings';
+import MessageUi from './components/MessageUi';
 
 const AppRoutes = [
   {
@@ -35,6 +36,10 @@ const AppRoutes = [
   {
     path: '/accountsettings',
     element: <AccountSettings />
+  },
+  {
+    path: '/messageui',
+    element: <MessageUi />
   }
 ];
 
