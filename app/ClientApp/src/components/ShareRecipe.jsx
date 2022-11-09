@@ -1,5 +1,16 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Button, Form, FormGroup, FormFeedback, Input, Label, Row, Col } from 'reactstrap';
+import {
+  Button,
+  Form,
+  FormGroup,
+  FormFeedback,
+  Input,
+  Label,
+  Row,
+  Col,
+  FormText
+} from 'reactstrap';
+
 import { authApi, UserContext } from '../contexts/UserProvider';
 
 export default function ShareRecipe() {
@@ -113,7 +124,7 @@ export default function ShareRecipe() {
         {ingredients.map((element, index) => (
           // change later from index to some sort of ID system
           // eslint-disable-next-line react/no-array-index-key
-          <div className="form-row" key={index}>
+          <div className="form-row mb-4" key={index}>
             <Row>
               <Col>
                 <Label sm={2}>Ingredient name</Label>
@@ -144,14 +155,14 @@ export default function ShareRecipe() {
                 </FormGroup>
               </Col>
               {ingredients.length > 1 && (
-                <Col lg={6} md={6} sm={12} xs={3}>
+                <div>
                   <Button
                     color="danger"
                     size="sm"
                     onClick={() => removeIngredient(ingredients.indexOf(element))}>
-                    -
+                    Remove
                   </Button>{' '}
-                </Col>
+                </div>
               )}
             </Row>
           </div>
@@ -170,6 +181,19 @@ export default function ShareRecipe() {
             invalid={isEmptyString(instructions)}
           />
           <FormFeedback invalid>Your recipe must have instructions!</FormFeedback>
+        </FormGroup>
+        <FormGroup>
+          <Label for="exampleFile">File</Label>
+          <Input
+            type="file"
+            name="file"
+            id="exampleFile"
+            onChange={(event) => console.log(event.target.files[0])}
+          />
+          <FormText color="muted">
+            This is some placeholder block-level help text for the above input. Its a bit lighter
+            and easily wraps to a new line.
+          </FormText>
         </FormGroup>
         <Button disabled={!inputValidity}>Submit</Button>
       </Form>

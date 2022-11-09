@@ -28,10 +28,8 @@ export default function LoggedOutHome() {
   return (
     <div className="position-absolute top-50 start-50 translate-middle">
       <div className="d-grid gap-3">
-        <div className="">
-          <div className="fw-bold fs-1 d-flex justify-content-center">ULTRA-SAVER</div>
-          <div className="fs-5">Your gateway to nutritious and inexpensive dining</div>
-        </div>
+        <div className="fw-bold fs-1 d-flex justify-content-center">ULTRA-SAVER</div>
+        <div className="fs-5">Your gateway to nutritious and inexpensive dining</div>
         <div className="d-flex justify-content-center">
           <div id="signInDiv" style={{ display: 'block' }} />
         </div>
