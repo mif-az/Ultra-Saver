@@ -1,20 +1,28 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace Ultra_Saver;
+
 public class RecipeModel : Model<string>
 {
-
+    [Key]
     public int Id { get; set; }
 
-    [Required]
-    public int Minutes { get; set; }
-    public int Wattage { get; set; }
+    public string Owner { get; set; } = "";
 
-    [Required]
-    public string Owner { get; set; } = null!;
+    public string Instruction { get; set; } = "";
 
-    [Required]
+    public int CalorieCount { get; set; }
+
+    public int FullPrepTime { get; set; }
+
     public string Name { get; set; } = null!;
+
+
+    //picture
+
+    public ICollection<UserLikedRecipeModel> UserLikedRecipe { get; set; } = null!;
+
+    public ICollection<RecipeIngredientModel> RecipeIngredient { get; set; } = null!;
 
     public override string GetSignature()
     {

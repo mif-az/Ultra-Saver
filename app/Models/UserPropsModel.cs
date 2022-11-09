@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace UltraSaver;
+namespace Ultra_Saver;
 
 public class UserPropsModel
 {

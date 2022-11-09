@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using UltraSaver;
 
 namespace Ultra_Saver;
 
@@ -23,7 +22,7 @@ public class AppDatabaseContext : DbContext
             .HasForeignKey<AllergensModel>(b => b.Email);
 
         modelBuilder.Entity<UserLikedRecipeModel>()
-       .HasKey(ab => new {ab.Id });
+       .HasKey(ab => new { ab.Id });
 
         modelBuilder.Entity<UserLikedRecipeModel>()
             .HasOne(ab => ab.User)
@@ -61,7 +60,7 @@ public class AppDatabaseContext : DbContext
 
     public DbSet<UserModel> User { get; set; } = null!;
 
-    public DbSet<NewRecipeModel> Recipe { get; set; } = null!;
+    public DbSet<OldRecipeModel> Recipe { get; set; } = null!;
 
     public DbSet<IngredientModel> Ingredient { get; set; } = null!;
 
@@ -69,9 +68,11 @@ public class AppDatabaseContext : DbContext
 
     public DbSet<AllergensModel> Allergens { get; set; } = null!;
 
-    public DbSet<UserLikedRecipeModel> UserLikedRecipe { get; set; } = null!; 
+    public DbSet<UserLikedRecipeModel> UserLikedRecipe { get; set; } = null!;
 
     public DbSet<UserOwnedApplianceModel> UserOwnedAppliance { get; set; } = null!;
 
     public DbSet<RecipeIngredientModel> RecipeIngredient { get; set; } = null!;
+
+    public DbSet<ChatMessageModel> ChatMessage { get; set; } = null!;
 }

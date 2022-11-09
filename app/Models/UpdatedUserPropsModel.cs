@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Ultra_Saver;
 
-namespace UltraSaver;
+namespace Ultra_Saver;
 
 public class UpdatedUserPropsModel : Model<string>
 {

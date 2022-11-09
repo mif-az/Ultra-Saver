@@ -44,10 +44,12 @@ public class RecipeController : ControllerBase
     public IActionResult UpsertRecipe(RecipeModel recipe) //For upserting we need the full model information (id can be ommited for creating a new recipe)
     {
         recipe.Owner = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim() ?? recipe.Owner; // Set recipe owner to current user
+        IQueryable<RecipeModel> sameRecipeIdQuery = (from r in _db.Recipes
+                                                     where r.Id == recipe.Id
+                                                     select r);
 
-        if ((from r in _db.Recipes
-             where r.Id == recipe.Id
-             select r).AsNoTracking().First()?.Equals(recipe) ?? true) // Check if signatures of the object in db and provided object match (if recipe exists in db)
+
+        if (sameRecipeIdQuery.AsNoTracking().FirstOrDefault()?.Equals(recipe) ?? true) // Check if signatures of the object in db and provided object match (if recipe exists in db)
         {
             try
             {

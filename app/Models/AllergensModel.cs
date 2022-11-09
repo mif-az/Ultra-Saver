@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace UltraSaver;
+namespace Ultra_Saver;
 
 public class AllergensModel
 {
@@ -8,7 +8,7 @@ public class AllergensModel
     [EmailAddress]
     public string Email { get; set; } = "";
 
-    public bool Vegetarian{ get; set; }
+    public bool Vegetarian { get; set; }
 
     public bool Vegan { get; set; }
 

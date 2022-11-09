@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   Button,
   Form,
@@ -11,18 +11,20 @@ import {
   FormText
 } from 'reactstrap';
 
+import { authApi, UserContext } from '../contexts/UserProvider';
+
 export default function ShareRecipe() {
   const [recipeTitle, setRecipeTitle] = useState('');
   const [description, setDescription] = useState('');
   const [ingredients, setIngredients] = useState([{ ingredientName: '', ingredientAmount: '' }]);
   const [instructions, setInstructions] = useState('');
   const [inputValidity, setInputValidity] = useState(true);
+  const [user] = useContext(UserContext);
 
   const isNumber = (input) => !Number.isNaN(+input); // isNaN returns true if the input is NOT a number, so we have to negate
   const isEmptyString = (str) => str.length === 0;
 
   const isInputValid = () => {
-    console.log(inputValidity);
     if (isEmptyString(recipeTitle)) {
       // check if it isn't already false to prevent infinite re-rendering
       if (inputValidity !== false) setInputValidity(false);
@@ -47,12 +49,23 @@ export default function ShareRecipe() {
     return true;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault(); // prevents page refresh
     console.log(recipeTitle);
     console.log(description);
     console.log(instructions);
     console.log(JSON.stringify(ingredients));
+    const recipeModel = {
+      owner: user.email,
+      instruction: instructions,
+      name: recipeTitle,
+      calorieCount: 1000, // Calories and full preptime will later be calculated from all the ingredients
+      fullPrepTime: 1000,
+      recipeIngredient: [],
+      userLikedRecipe: []
+    };
+    console.log(JSON.stringify(recipeModel));
+    await authApi(user).post('recipe', JSON.stringify(recipeModel));
   };
 
   const handleFormChange = (event, element) => {

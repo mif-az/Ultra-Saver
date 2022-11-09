@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace UltraSaver;
+namespace Ultra_Saver;
 
 public class RecipeIngredientModel
 {
@@ -13,7 +13,7 @@ public class RecipeIngredientModel
 
     public string IngredientCookingMethod { get; set; } = "";
 
-    public NewRecipeModel Recipe { get; set; } = null!;
+    public RecipeModel Recipe { get; set; } = null!;
 
     public IngredientModel Ingredient { get; set; } = null!;
 }
