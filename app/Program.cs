@@ -1,7 +1,4 @@
-using System.Data.Common;
-using System.Data.SqlClient;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Ultra_Saver;
 
@@ -26,6 +23,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         clientId: "929531042172-l5h1hbegcb3qm6nkpg1r7m4aa6seb98n.apps.googleusercontent.com"
     ));
 
+builder.Services.AddSignalR();
+
 
 var app = builder.Build();
 
@@ -38,17 +37,23 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 // app.UseStaticFiles();
+
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://usaver.ddns.net:3477", "https://localhost:44462"));
+
 app.UseRouting();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseWebSockets();
+
+app.MapHub<ChatHandlerService>("/chat/send");
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
-app.MapFallbackToFile("index.html"); ;
+app.MapFallbackToFile("index.html");
 
 app.Run();

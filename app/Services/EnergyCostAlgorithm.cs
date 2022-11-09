@@ -40,7 +40,7 @@ public struct EnergyCostAlgorithm
         TotalEnergy += ConvertTokWh(AppliancePower * 120 / ApplianceEfficiency.GetEfficiency(Type));
     }
 
-    public void BoilingWater(short WaterVolume, ApplianceType Type)
+    public void BoilingWater(float WaterVolume, ApplianceType Type)
     {
         TotalEnergy += ConvertTokWh(WaterToBoilHeat * WaterVolume / ApplianceEfficiency.GetEfficiency(Type));
     }

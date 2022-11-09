@@ -37,7 +37,7 @@ export default class NavMenu extends Component {
           className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3"
           container
           light>
-          <NavbarBrand tag={Link} to="/">
+          <NavbarBrand className="fw-bold" tag={Link} to="/">
             Ultra_Saver
           </NavbarBrand>
           <Welcome />
@@ -47,11 +47,6 @@ export default class NavMenu extends Component {
             isOpen={!this.state.collapsed}
             navbar>
             <ul className="navbar-nav flex-grow">
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/">
-                  Home
-                </NavLink>
-              </NavItem>
               <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/user/properties">
                   Properties

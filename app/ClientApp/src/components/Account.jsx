@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import {
-  Button,
   NavItem,
   NavLink,
   DropdownToggle,
@@ -18,6 +17,11 @@ export default function Welcome() {
     RemoveJwtToken(setUser);
   };
 
+  const imgStyle = {
+    maxHeight: 32,
+    maxWidth: 32
+  };
+
   return Object.keys(user).length < 1 ? (
     <NavItem>
       <NavLink tag={Link} className="text-dark" to="/login">
@@ -27,15 +31,22 @@ export default function Welcome() {
   ) : (
     <UncontrolledDropdown nav inNavbar>
       <DropdownToggle nav caret className="text-dark">
-        Account
+        <img
+          src={user.picture}
+          className="rounded-circle img-fluid"
+          alt="Responsive"
+          style={imgStyle}
+        />
       </DropdownToggle>
       <DropdownMenu end>
         <DropdownItem tag={Link} to="/accountsettings" className="text-dark">
           Account Settings
         </DropdownItem>
-        <Button outline tag={Link} to="/" onClick={HandleLogOut}>
-          Sign Out
-        </Button>
+        <div className="d-flex justify-content-center">
+          <DropdownItem tag={Link} to="/" onClick={HandleLogOut}>
+            Sign Out
+          </DropdownItem>
+        </div>
       </DropdownMenu>
     </UncontrolledDropdown>
   );
