@@ -13,17 +13,17 @@ public class EnergyCostController : ControllerBase
         _db = db;
     }
 
-    [HttpGet]
-    public IActionResult CalculateEnergyCost()
-    {
-        var res = _db.Recipes.Find(1);
-        if (res == null)
-        {
-            return StatusCode(500);
-        }
+    // [HttpGet]
+    // public IActionResult CalculateEnergyCost()
+    // {
+    //     var res = _db.Recipes.Find(1);
+    //     if (res == null)
+    //     {
+    //         return StatusCode(500);
+    //     }
 
-        return Ok(CalculateKiloWattHours(res.Minutes, res.Wattage) * 2); //ignitis standartas 
-    }
+    //     return Ok(CalculateKiloWattHours(res.Minutes, res.Wattage) * 2); //ignitis standartas 
+    // }
 
     private float CalculateKiloWattHours(float minutes, float wattage) // returns kWh of recipe
     {

@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using UltraSaver;
 
 namespace Ultra_Saver;
 
@@ -61,7 +60,7 @@ public class AppDatabaseContext : DbContext
 
     public DbSet<UserModel> User { get; set; } = null!;
 
-    public DbSet<NewRecipeModel> Recipe { get; set; } = null!;
+    public DbSet<OldRecipeModel> Recipe { get; set; } = null!;
 
     public DbSet<IngredientModel> Ingredient { get; set; } = null!;
 

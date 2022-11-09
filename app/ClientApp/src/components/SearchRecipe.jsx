@@ -9,7 +9,7 @@ export default function SearchRecipe() {
   const [sortOption, setSortOption] = useState();
   const [filterOptions, setFilterOptions] = useState({
     wattage: '',
-    minutes: ''
+    fullPrepTime: ''
   });
   const [user] = useContext(UserContext);
 
@@ -20,7 +20,7 @@ export default function SearchRecipe() {
     },
     {
       label: 'Lowest time',
-      value: 'minutes'
+      value: 'fullPrepTime'
     },
     {
       label: 'Lowest price',
@@ -31,6 +31,7 @@ export default function SearchRecipe() {
   async function fetchData(q) {
     const response = await authApi(user).get(`${URL}/recipe?filter=${q}`);
     const data = await response.json();
+    console.log(data);
     return data;
   }
 
@@ -50,7 +51,7 @@ export default function SearchRecipe() {
   const updateAndSetRecipes = (d, sort, filters) => {
     let data = d;
     data = filterData(data, 'wattage', filters.wattage); // should implement more automated way of doing this later
-    data = filterData(data, 'minutes', filters.minutes);
+    data = filterData(data, 'fullPrepTime', filters.fullPrepTime);
     data = sortData(data, sort);
 
     setRecipes(data);
@@ -124,7 +125,7 @@ export default function SearchRecipe() {
             <Input
               type="text"
               onChange={(e) => {
-                handleFilterChange('minutes', e.target.value);
+                handleFilterChange('fullPrepTime', e.target.value);
               }}
             />
           </div>
@@ -135,7 +136,7 @@ export default function SearchRecipe() {
           <div className="row border-2 mt-1 bg-dark text-white rounded-1 p-2" key={el.id}>
             <div className="col-5">
               <div className="fw-bold">{el.name}</div>
-              <p>~{el.minutes} minutes to make</p>
+              <p>~{el.fullPrepTime} minutes to make</p>
               <p>Short description here (which we dont have)</p>
             </div>
             <div className="col-6">
