@@ -1,5 +1,7 @@
+using System.Runtime.ExceptionServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Configuration;
 using Ultra_Saver;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +27,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddSignalR();
 
+builder.Logging.AddProvider(new FileLoggerProvider(new FileLoggerConfiguration(
+    filename: builder.Configuration["Logging:LogFile"] ?? "saver.log",
+    level: Enum.Parse<LogLevel>(builder.Configuration["Logging:LogLevel:Default"])
+)));
+
+builder.Services.AddLogging();
 
 var app = builder.Build();
 
@@ -33,6 +41,11 @@ if (!app.Environment.IsDevelopment())
 {
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+
+    AppDomain.CurrentDomain.FirstChanceException += (state, args) =>
+    {
+        app.Logger.LogWarning(args.Exception, $"{args.Exception.Source}: {args.Exception.Message}");
+    };
 }
 
 app.UseHttpsRedirection();
