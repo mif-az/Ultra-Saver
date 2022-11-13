@@ -1,4 +1,4 @@
-namespace Ultra_Saver;
+namespace Ultra_Saver.Models;
 
 public abstract class Model<T> : IEquatable<Model<T>> where T : IEquatable<T>
 {

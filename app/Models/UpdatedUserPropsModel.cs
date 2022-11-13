@@ -1,8 +1,9 @@
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Ultra_Saver;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Ultra_Saver;
+namespace Ultra_Saver.Models;
+[ExcludeFromCodeCoverage]
+
 
 public class UpdatedUserPropsModel : Model<string>
 {

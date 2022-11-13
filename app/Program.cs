@@ -1,8 +1,8 @@
-using System.Runtime.ExceptionServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging.Configuration;
 using Ultra_Saver;
+using Ultra_Saver.Configuration;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,3 +70,5 @@ app.MapControllerRoute(
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
+public partial class Program { }

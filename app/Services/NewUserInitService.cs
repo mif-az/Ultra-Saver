@@ -1,4 +1,4 @@
-using Ultra_Saver.Migrations;
+using Ultra_Saver.Models;
 
 namespace Ultra_Saver;
 

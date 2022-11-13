@@ -1,6 +1,6 @@
 
-
 using System.Collections.Concurrent;
+namespace Ultra_Saver.Configuration;
 
 public class FileLogger : ILogger
 {

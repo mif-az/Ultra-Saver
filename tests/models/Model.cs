@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Ultra_Saver.Models;
 using Xunit;
 
 namespace tests;
@@ -13,7 +14,7 @@ public class Model
 
     [Theory]
     [MemberData(nameof(ModelsAreEqualIfSignaturesAreCases))]
-    public void ModelsAreEqualIfSignaturesAre(Ultra_Saver.Model<string> model1, Ultra_Saver.Model<string> model2)
+    public void ModelsAreEqualIfSignaturesAre(Model<string> model1, Model<string> model2)
     {
         Assert.True(model1.GetSignature().Equals(model2.GetSignature()) ? model1.Equals(model2) : !model1.Equals(model2));
     }
@@ -27,7 +28,7 @@ public class Model
 
 }
 
-class MockModel1 : Ultra_Saver.Model<string>
+class MockModel1 : Model<string>
 {
     public string Signature { get; set; } = "";
     public override string GetSignature()
@@ -36,7 +37,7 @@ class MockModel1 : Ultra_Saver.Model<string>
     }
 }
 
-class MockModel2 : Ultra_Saver.Model<string>
+class MockModel2 : Model<string>
 {
     public string Something { get; set; } = "";
     public override string GetSignature()

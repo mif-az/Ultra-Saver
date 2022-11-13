@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Ultra_Saver.Models;
 namespace Ultra_Saver.Controllers;
 
 [ApiController]
