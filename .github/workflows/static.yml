@@ -36,7 +36,7 @@ jobs:
       - name: Dotnet Test With Coverage
         run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=\"[*]Ultra_Saver.Configuration.*,[*]Ultra_Saver.Migrations.*\"
       - name: Generate Coverage Report
-        run: reportgenerator -reports:"./tests/coverage.cobertura.xml" -targetdir:"./reports" && chromium ./reports/index.html
+        run: reportgenerator -reports:"./tests/coverage.cobertura.xml" -targetdir:"./reports"
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload artifact
