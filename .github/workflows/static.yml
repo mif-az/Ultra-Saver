@@ -34,15 +34,15 @@ jobs:
       - name: Setup Dotnet Tools
         run: dotnet tool install dotnet-reportgenerator-globaltool --global
       - name: Dotnet Test With Coverage
-        run: dotnet test --collect:"XPlat Code Coverage"
+        run: dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=\"[*]Ultra_Saver.Configuration.*,[*]Ultra_Saver.Migrations.*\"
       - name: Generate Coverage Report
-        run: reportgenerator -reports:"./tests/TestResults/**/*.xml" -targetdir:"./reports"
+        run: reportgenerator -reports:"./tests/coverage.cobertura.xml" -targetdir:"./reports" && chromium ./reports/index.html
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: './reports'
+          path: "./reports"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1

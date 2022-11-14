@@ -1,12 +1,12 @@
 
 
-using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Ultra_Saver.Models;
 
 namespace Ultra_Saver;
 
@@ -15,10 +15,12 @@ namespace Ultra_Saver;
 public class RecipeController : ControllerBase
 {
     private readonly AppDatabaseContext _db;
+    private readonly ILogger<RecipeController> _logger;
 
-    public RecipeController(AppDatabaseContext db)
+    public RecipeController(AppDatabaseContext db, ILogger<RecipeController> logger)
     {
         _db = db;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -57,11 +59,10 @@ public class RecipeController : ControllerBase
                 _db.SaveChanges();
                 return Ok();
             }
-#pragma warning disable // TODO
 
             catch (Exception e)
             {
-                // TODO log the exception
+                _logger.LogWarning(e, "Error updating recipe in db.");
                 return StatusCode(500);
             }
         }

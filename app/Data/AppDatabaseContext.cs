@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Ultra_Saver.Models;
 
 namespace Ultra_Saver;
 
