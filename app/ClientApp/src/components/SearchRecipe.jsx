@@ -134,14 +134,17 @@ export default function SearchRecipe() {
       <div className="row form-check border-1 border-danger">
         {recipes.map((el) => (
           <div className="row border-2 mt-1 bg-dark text-white rounded-1 p-2" key={el.id}>
-            <div className="col-5">
+            <div className="col-6">
               <div className="fw-bold">{el.name}</div>
               <p>~{el.fullPrepTime} minutes to make</p>
               <p>Short description here (which we dont have)</p>
             </div>
-            <div className="col-6">
+            <div className="col">
               <p>Estimated price:</p>
               <p>{el.wattage}$</p>
+            </div>
+            <div className="col">
+              <img style={{ width: 200 }} src={`data:image/jpeg;base64,${el.imageData}`} alt="" />
             </div>
           </div>
         ))}

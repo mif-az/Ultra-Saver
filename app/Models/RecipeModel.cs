@@ -20,8 +20,7 @@ public class RecipeModel : Model<string>
 
     public string Name { get; set; } = null!;
 
-
-    //picture
+    public byte[] ImageData { get; set; } = null!;
 
     public ICollection<UserLikedRecipeModel> UserLikedRecipe { get; set; } = null!;
 
