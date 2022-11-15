@@ -9,7 +9,7 @@ export default function Chat() {
     ''
   ) : (
     <NavItem>
-      <NavLink tag={Link} className="text-dark" to="/messageui">
+      <NavLink tag={Link} className="text-dark" to="/communitychat">
         Chat
       </NavLink>
     </NavItem>

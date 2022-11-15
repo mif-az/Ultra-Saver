@@ -7,6 +7,7 @@ import SearchRecipe from './components/SearchRecipe';
 import EnergyCalculation from './components/EnergyCalculation';
 import AccountSettings from './components/AccountSettings';
 import MessageUi from './components/MessageUi';
+import CommunityChat from './components/CommunityChat';
 
 const AppRoutes = [
   {
@@ -40,6 +41,10 @@ const AppRoutes = [
   {
     path: '/messageui',
     element: <MessageUi />
+  },
+  {
+    path: '/communitychat',
+    element: <CommunityChat />
   }
 ];
 
