@@ -6,6 +6,7 @@ import './NavMenu.css';
 import Welcome from './Welcome';
 import Account from './Account';
 import Recipes from './Recipes';
+import Chat from './Chat';
 
 export default class NavMenu extends Component {
   // eslint-disable-next-line react/static-property-placement
@@ -56,6 +57,7 @@ export default class NavMenu extends Component {
                   Energy Cost
                 </NavLink>
               </NavItem>
+              <Chat />
               <Recipes />
               <Account />
             </ul>
