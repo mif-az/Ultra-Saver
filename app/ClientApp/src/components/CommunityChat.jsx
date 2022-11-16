@@ -12,8 +12,8 @@ export default function ChatExample() {
   const [input, setInput] = useState(null);
   const [msgStatus, setMsgStatus] = useState({ sending: false });
   const [messages, setMessages] = useState([]);
-  const [time, setTime] = useState();
-  const date = new Date();
+  // const [time, setTime] = useState();
+  // const date = new Date();
 
   useEffect(() => {
     const fn = async () => {
@@ -68,9 +68,9 @@ export default function ChatExample() {
     }
   };
 
-  const handleSendTime = () => {
-    setTime(date);
-  };
+  // const handleSendTime = () => {
+  //   setTime(date);
+  // };
 
   const removeMessage = async (id) => {
     await connection.invoke('removeMessage', id);
@@ -89,7 +89,7 @@ export default function ChatExample() {
           <button
             type="button"
             className="btn btn-primary col-1"
-            onClick={((e) => handleSendMessage(e), handleSendTime)}>
+            onClick={(e) => handleSendMessage(e)}>
             Send
           </button>
         </div>
