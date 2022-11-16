@@ -51,6 +51,13 @@ public class RecipeController : ControllerBase
                                                      select r);
 
 
+        if (recipe.Id == 0) // if ID is omitted when creating recipe, it gets automatically set to 0
+        {
+            _db.Recipes.Add(recipe);
+            _db.SaveChanges();
+            return Ok();
+        }
+
         if (sameRecipeIdQuery.AsNoTracking().FirstOrDefault()?.Equals(recipe) ?? true) // Check if signatures of the object in db and provided object match (if recipe exists in db)
         {
             try
