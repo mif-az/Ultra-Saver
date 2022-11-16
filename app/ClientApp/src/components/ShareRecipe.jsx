@@ -19,6 +19,7 @@ export default function ShareRecipe() {
   const [ingredients, setIngredients] = useState([{ ingredientName: '', ingredientAmount: '' }]);
   const [instructions, setInstructions] = useState('');
   const [inputValidity, setInputValidity] = useState(true);
+  const [imageData, setImageData] = useState();
   const [user] = useContext(UserContext);
 
   const isNumber = (input) => !Number.isNaN(+input); // isNaN returns true if the input is NOT a number, so we have to negate
@@ -51,16 +52,14 @@ export default function ShareRecipe() {
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // prevents page refresh
-    console.log(recipeTitle);
-    console.log(description);
-    console.log(instructions);
-    console.log(JSON.stringify(ingredients));
+
     const recipeModel = {
       owner: user.email,
       instruction: instructions,
       name: recipeTitle,
       calorieCount: 1000, // Calories and full preptime will later be calculated from all the ingredients
       fullPrepTime: 1000,
+      imageData,
       recipeIngredient: [],
       userLikedRecipe: []
     };
@@ -73,6 +72,21 @@ export default function ShareRecipe() {
     const tempIngredients = [...ingredients];
     tempIngredients[index][event.target.name] = event.target.value;
     setIngredients(tempIngredients);
+  };
+
+  const handleReaderLoaded = (e) => {
+    const binaryString = e.target.result;
+    setImageData(btoa(binaryString));
+  };
+
+  const handlePictureUpload = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = handleReaderLoaded;
+      reader.readAsBinaryString(file);
+    }
   };
 
   const addIngredient = () => {
@@ -183,17 +197,9 @@ export default function ShareRecipe() {
           <FormFeedback invalid>Your recipe must have instructions!</FormFeedback>
         </FormGroup>
         <FormGroup>
-          <Label for="exampleFile">File</Label>
-          <Input
-            type="file"
-            name="file"
-            id="exampleFile"
-            onChange={(event) => console.log(event.target.files[0])}
-          />
-          <FormText color="muted">
-            This is some placeholder block-level help text for the above input. Its a bit lighter
-            and easily wraps to a new line.
-          </FormText>
+          <Label>Recipe picture</Label>
+          <Input type="file" name="file" onChange={(event) => handlePictureUpload(event)} />
+          <FormText color="muted">Upload your recipes picture</FormText>
         </FormGroup>
         <Button disabled={!inputValidity}>Submit</Button>
       </Form>
