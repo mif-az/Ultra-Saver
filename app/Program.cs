@@ -34,18 +34,25 @@ builder.Logging.AddProvider(new FileLoggerProvider(new FileLoggerConfiguration(
 
 builder.Services.AddLogging();
 
+builder.Services.AddScoped<INewUserInitService, NewUserInitService>();
+
+builder.Services.AddScoped<IEnergyCostAlgorithm, EnergyCostAlgorithm>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
 
     AppDomain.CurrentDomain.FirstChanceException += (state, args) =>
     {
         app.Logger.LogWarning(args.Exception, $"{args.Exception.Source}: {args.Exception.Message}");
     };
+}
+else
+{
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();

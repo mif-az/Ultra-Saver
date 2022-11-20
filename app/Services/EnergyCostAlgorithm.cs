@@ -1,7 +1,17 @@
 
 namespace Ultra_Saver;
 
-public struct EnergyCostAlgorithm
+public interface IEnergyCostAlgorithm
+{
+    double TotalEnergy { get; set; }
+    float GasVolumeUsed { get; set; }
+
+    void BoilingWater(float WaterVolume, ApplianceType Type);
+    void ElectricPower(int AppliancePower, float PowerScale, int Time, ApplianceType Type);
+    void HeatingPan(int AppliancePower, ApplianceType Type);
+}
+
+public class EnergyCostAlgorithm : IEnergyCostAlgorithm
 {
     public EnergyCostAlgorithm() { }
     public double TotalEnergy { get; set; } = 0;
@@ -30,7 +40,7 @@ public struct EnergyCostAlgorithm
 
     public static double GasConvertkWh(float TotalGasUsed, ApplianceType Type)
     {
-        return ConvertTokWh(TotalGasUsed * GasBurnEnergy  * ApplianceEfficiency.GetEfficiency(Type));
+        return ConvertTokWh(TotalGasUsed * GasBurnEnergy * ApplianceEfficiency.GetEfficiency(Type));
     }
 
     public void HeatingPan(int AppliancePower, ApplianceType Type)
@@ -45,8 +55,9 @@ public struct EnergyCostAlgorithm
         TotalEnergy += ConvertTokWh(WaterToBoilHeat * WaterVolume / ApplianceEfficiency.GetEfficiency(Type));
     }
 
-    private static double ConvertTokWh (double Value){
-    //               hours * kilo
+    private static double ConvertTokWh(double Value)
+    {
+        //               hours * kilo
         return Value / 3_600_000;
     }
 }

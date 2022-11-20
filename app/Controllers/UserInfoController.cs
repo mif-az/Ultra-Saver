@@ -10,12 +10,14 @@ public class UserInfoController : ControllerBase
 {
     private readonly AppDatabaseContext _db;
     private readonly ILogger<UserInfoController> _logger;
+    private readonly INewUserInitService _newUserInitService;
 
-    public UserInfoController(AppDatabaseContext db, ILogger<UserInfoController> logger)
+    public UserInfoController(AppDatabaseContext db, ILogger<UserInfoController> logger, INewUserInitService newUserInitService)
     {
         // Use dependency injection to get access to the database
         this._db = db;
         _logger = logger;
+        _newUserInitService = newUserInitService;
     }
 
     [HttpGet]
@@ -34,7 +36,7 @@ public class UserInfoController : ControllerBase
         {
             // If this user logged in for the first time - we call a service that initializes a new user in the database
             _logger.LogInformation("A new user has registered.");
-            NewUserInitService.init(db: _db, email: email);
+            _newUserInitService.init(db: _db, email: email);
             res = this._db.Properties.Find(email);
         }
 
