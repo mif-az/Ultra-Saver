@@ -22,14 +22,13 @@ public class FileLogger : ILogger
             return;
         }
 
+        var filename = _getCurrentConfig().Filename;
 
-        var fs = _getCurrentConfig().LogFile;
-
-        lock (fs)
+        LockManager.GetLock(filename, () =>
         {
-            fs.WriteLine($"[{logLevel}] ({DateTime.Now}) {state} {exception?.Data}\n{exception?.StackTrace}");
-            fs.Flush();
-        }
+            File.AppendAllText(filename, $"[{logLevel}] ({DateTime.Now}) {state} {exception?.Data}\n{exception?.StackTrace}");
+        });
+
     }
 }
 
@@ -37,26 +36,15 @@ public sealed class FileLoggerConfiguration
 {
     public FileLoggerConfiguration(string filename, LogLevel level = LogLevel.Information)
     {
-        _file = new Lazy<StreamWriter>(new StreamWriter(filename));
+        Filename = filename;
         Level = level;
-    }
-
-    ~FileLoggerConfiguration()
-    {
-        _file.Value.Flush();
-        _file.Value.Close();
     }
 
     public LogLevel Level { get; set; }
 
     public long MaxFileSize { get; set; } = (long)1e7; //10 Mb
 
-    private Lazy<StreamWriter> _file;
-
-    public StreamWriter LogFile
-    {
-        get => _file.Value;
-    }
+    public string Filename { get; set; }
 
 }
 
