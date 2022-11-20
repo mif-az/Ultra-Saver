@@ -16,11 +16,30 @@ public class RecipeController : ControllerBase
 {
     private readonly AppDatabaseContext _db;
     private readonly ILogger<RecipeController> _logger;
+    private readonly StatisticsProcessor<RecipeModel> _recipeStatistics;
+    private readonly IEnergyCostAlgorithm _energyCostAlgorithm;
 
-    public RecipeController(AppDatabaseContext db, ILogger<RecipeController> logger)
+    public RecipeController(AppDatabaseContext db, ILogger<RecipeController> logger, IStatisticsProcessorFactory statisticsProcessorFactory, IEnergyCostAlgorithm energyCostAlgorithm)
     {
         _db = db;
         _logger = logger;
+        _recipeStatistics = statisticsProcessorFactory.GetStatisticsProcessor<RecipeModel>(_db.Recipes);
+        _energyCostAlgorithm = energyCostAlgorithm;
+    }
+
+    [HttpGet("stats")]
+    public async Task<IActionResult> GetStats()
+    {
+        return Ok(new
+        {
+            count = _recipeStatistics.GetCount(r => r),
+            minutes = await _recipeStatistics.getAverageCollAsync(r => r, r => r.FullPrepTime),
+            wattage = await _recipeStatistics.getAverageCollAsync(r => r, r =>
+            {
+                _energyCostAlgorithm.ElectricPower(1000, 0.5f, r.FullPrepTime, ApplianceType.ELECTRIC_COIL_STOVE);
+                return _energyCostAlgorithm.TotalEnergy;
+            }),
+        });
     }
 
     [HttpGet]

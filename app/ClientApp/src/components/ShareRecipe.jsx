@@ -10,6 +10,7 @@ import {
   Col,
   FormText
 } from 'reactstrap';
+import URL from '../appUrl';
 
 import { authApi, UserContext } from '../contexts/UserProvider';
 
@@ -64,7 +65,7 @@ export default function ShareRecipe() {
       userLikedRecipe: []
     };
     console.log(JSON.stringify(recipeModel));
-    await authApi(user).post('recipe', JSON.stringify(recipeModel));
+    await authApi(user).post(`${URL}/recipe`, JSON.stringify(recipeModel));
   };
 
   const handleFormChange = (event, element) => {

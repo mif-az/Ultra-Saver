@@ -38,6 +38,8 @@ builder.Services.AddScoped<INewUserInitService, NewUserInitService>();
 
 builder.Services.AddScoped<IEnergyCostAlgorithm, EnergyCostAlgorithm>();
 
+builder.Services.AddSingleton<IStatisticsProcessorFactory>(new StatisticsProcessorFactory());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
