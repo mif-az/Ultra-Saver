@@ -52,10 +52,6 @@ if (app.Environment.IsDevelopment())
         app.Logger.LogWarning(args.Exception, $"{args.Exception.Source}: {args.Exception.Message}");
     };
 }
-else
-{
-    app.UseHsts();
-}
 
 app.UseHttpsRedirection();
 // app.UseStaticFiles();
