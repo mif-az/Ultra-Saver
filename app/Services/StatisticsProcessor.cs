@@ -29,7 +29,7 @@ public class StatisticsProcessor<T> where T : class
         return count.Item1;
     }
 
-    public async Task<double> getAverageCollAsync(Selector selector, Func<T, double> elems)
+    public async Task<double> GetAverageCollAsync(Selector selector, Func<T, double> elems)
     {
         Tuple<double, DateTime> avg;
         if (averages.TryGetValue(selector, out avg) && DateTime.Compare(avg.Item2.AddSeconds(_interval), DateTime.Now) >= 0)
@@ -44,7 +44,7 @@ public class StatisticsProcessor<T> where T : class
         return average;
     }
 
-    public StatisticsProcessor<T> updateDbContext(DbSet<T> newContext)
+    public StatisticsProcessor<T> UpdateDbContext(DbSet<T> newContext)
     {
         this.model = newContext;
         return this;
@@ -61,12 +61,12 @@ public class StatisticsProcessorFactory : IStatisticsProcessorFactory
 
     private ConcurrentDictionary<Tuple<Type, int>, object> availableProcessors = new ConcurrentDictionary<Tuple<Type, int>, object>();
 
-    private void addProcessor<T>(Tuple<Type, int> key, StatisticsProcessor<T> value) where T : class
+    private void AddProcessor<T>(Tuple<Type, int> key, StatisticsProcessor<T> value) where T : class
     {
         availableProcessors.TryAdd(key, value);
     }
 
-    private StatisticsProcessor<T>? getProcessor<T>(Tuple<Type, int> type) where T : class
+    private StatisticsProcessor<T>? GetProcessor<T>(Tuple<Type, int> type) where T : class
     {
         object obj;
         if (availableProcessors.TryGetValue(type, out obj))
@@ -78,13 +78,13 @@ public class StatisticsProcessorFactory : IStatisticsProcessorFactory
 
     public StatisticsProcessor<T> GetStatisticsProcessor<T>(DbSet<T> modelSet, int interval = 60) where T : class
     {
-        var sp = getProcessor<T>(Tuple.Create(modelSet.GetType(), interval));
+        var sp = GetProcessor<T>(Tuple.Create(modelSet.GetType(), interval));
         if (sp == null)
         {
             sp = new StatisticsProcessor<T>(modelSet, interval);
-            addProcessor<T>(Tuple.Create(modelSet.GetType(), interval), sp);
+            AddProcessor<T>(Tuple.Create(modelSet.GetType(), interval), sp);
         }
-        return sp.updateDbContext(modelSet);
+        return sp.UpdateDbContext(modelSet);
     }
 
 }

@@ -33,8 +33,8 @@ public class RecipeController : ControllerBase
         return Ok(new
         {
             count = _recipeStatistics.GetCount(r => r),
-            minutes = await _recipeStatistics.getAverageCollAsync(r => r, r => r.FullPrepTime),
-            wattage = await _recipeStatistics.getAverageCollAsync(r => r, r =>
+            minutes = await _recipeStatistics.GetAverageCollAsync(r => r, r => r.FullPrepTime),
+            wattage = await _recipeStatistics.GetAverageCollAsync(r => r, r =>
             {
                 _energyCostAlgorithm.ElectricPower(1000, 0.5f, r.FullPrepTime, ApplianceType.ELECTRIC_COIL_STOVE);
                 return _energyCostAlgorithm.TotalEnergy;
