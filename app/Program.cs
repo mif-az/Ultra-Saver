@@ -52,15 +52,11 @@ if (app.Environment.IsDevelopment())
         app.Logger.LogWarning(args.Exception, $"{args.Exception.Source}: {args.Exception.Message}");
     };
 }
-else
-{
-    app.UseHsts();
-}
 
 app.UseHttpsRedirection();
 // app.UseStaticFiles();
 
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://usaver.ddns.net:3477", "https://localhost:44462"));
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://usaver.ddns.net:2781", "https://localhost:44462"));
 
 app.UseRouting();
 
