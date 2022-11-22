@@ -42,6 +42,7 @@ jobs:
     - name: Setup DB Connection
       run: printf "${{ secrets.MASTER_DB_PASSWORD }}" > ./saver/creds
   deployment:
+    needs: conditional_job
     if: ${{ !startsWith(github.event.head_commit.message,'%no-action%') || github.event_name == 'workflow_dispatch' }}
     environment:
       name: dev
