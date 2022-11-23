@@ -44,9 +44,6 @@ export default function CooldownTimer() {
     deadline.setSeconds(deadline.getSeconds() + 300);
     return deadline;
   };
-  // useEffect(() => {
-  //   clearTimer(getDeadTime());
-  // }, []);
 
   const resetTimer = () => {
     clearTimer(getDeadTime());
