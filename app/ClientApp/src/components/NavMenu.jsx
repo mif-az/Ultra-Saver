@@ -7,6 +7,7 @@ import Welcome from './Welcome';
 import Account from './Account';
 import Recipes from './Recipes';
 import Chat from './Chat';
+// import Timer from './CooldownTimer';
 
 export default class NavMenu extends Component {
   // eslint-disable-next-line react/static-property-placement
@@ -59,6 +60,11 @@ export default class NavMenu extends Component {
               </NavItem>
               <Chat />
               <Recipes />
+              <NavItem>
+                <NavLink tag={Link} className="text-dark" to="/cooldowntimer">
+                  Timer
+                </NavLink>
+              </NavItem>
               <Account />
             </ul>
           </Collapse>

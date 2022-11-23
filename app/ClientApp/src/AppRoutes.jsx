@@ -8,6 +8,7 @@ import EnergyCalculation from './components/EnergyCalculation';
 import AccountSettings from './components/AccountSettings';
 import MessageUi from './components/MessageUi';
 import CommunityChat from './components/CommunityChat';
+import CooldownTimer from './components/CooldownTimer';
 
 const AppRoutes = [
   {
@@ -45,6 +46,10 @@ const AppRoutes = [
   {
     path: '/communitychat',
     element: <CommunityChat />
+  },
+  {
+    path: '/cooldowntimer',
+    element: <CooldownTimer />
   }
 ];
 
