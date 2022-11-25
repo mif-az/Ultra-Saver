@@ -17,7 +17,14 @@ import { authApi, UserContext } from '../contexts/UserProvider';
 export default function ShareRecipe() {
   const [recipeTitle, setRecipeTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [ingredients, setIngredients] = useState([{ ingredientName: '', ingredientAmount: '' }]);
+  const [ingredients, setIngredients] = useState([
+    {
+      ingredientName: '',
+      ingredientAmount: '',
+      ingredientPreparationMethod: 'None of the above',
+      ingredientPreparation: ''
+    }
+  ]);
   const [instructions, setInstructions] = useState('');
   const [inputValidity, setInputValidity] = useState(true);
   const [imageData, setImageData] = useState();
@@ -41,7 +48,11 @@ export default function ShareRecipe() {
 
     for (let i = 0; i < ingredients.length; i += 1) {
       const ingredient = ingredients[i];
-      if (!isNumber(ingredient.ingredientAmount) || isEmptyString(ingredient.ingredientName)) {
+      if (
+        !isNumber(ingredient.ingredientAmount) ||
+        isEmptyString(ingredient.ingredientName) ||
+        isEmptyString(ingredient.ingredientPreparation)
+      ) {
         if (inputValidity !== false) setInputValidity(false);
         return false;
       }
@@ -93,7 +104,12 @@ export default function ShareRecipe() {
   const addIngredient = () => {
     // setIngredients(...ingredients, { ingredientName: '', ingredientAmount: '' });
     const tempIngredients = [...ingredients];
-    tempIngredients.push({ ingredientName: '', ingredientAmount: '' });
+    tempIngredients.push({
+      ingredientName: '',
+      ingredientAmount: '',
+      ingredientPreparationMethod: 'None of the above',
+      ingredientPreparation: ''
+    });
     setIngredients(tempIngredients);
   };
 
@@ -106,6 +122,7 @@ export default function ShareRecipe() {
 
   useEffect(() => {
     isInputValid();
+    console.log(ingredients);
   });
 
   return (
@@ -169,6 +186,37 @@ export default function ShareRecipe() {
                   <FormFeedback invalid>Your input has to be a number!</FormFeedback>
                 </FormGroup>
               </Col>
+              <Col>
+                <Label sm={2}>Ingredient preparation method</Label>
+                <FormGroup>
+                  <Input
+                    type="select"
+                    name="ingredientPreparationMethod"
+                    onChange={(event) => handleFormChange(event, element)}
+                    value={ingredients[index].ingredientPreparationMethod}>
+                    <option>Boiled</option>
+                    <option>Baked in oven</option>
+                    <option>Heated</option>
+                    <option>Steamed</option>
+                    <option>None of the above</option>
+                  </Input>
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Label sm={2}>Please describe how this ingredient is prepared</Label>
+              <FormGroup>
+                <Input
+                  type="textarea"
+                  name="ingredientPreparation"
+                  onChange={(event) => handleFormChange(event, element)}
+                  value={ingredients[index].ingredientPreparation}
+                  invalid={isEmptyString(ingredients[index].ingredientPreparation)}
+                />
+                <FormFeedback invalid>
+                  Your ingredient must have an explanation how to prepare it!
+                </FormFeedback>
+              </FormGroup>
               {ingredients.length > 1 && (
                 <div>
                   <Button

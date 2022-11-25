@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Input, Label } from 'reactstrap';
+import { Button, Input, Label } from 'reactstrap';
 import { authApi, UserContext } from '../contexts/UserProvider';
 import URL from '../appUrl';
 
@@ -55,6 +55,18 @@ export default function SearchRecipe() {
     data = sortData(data, sort);
 
     setRecipes(data);
+  };
+
+  const handleLikeRecipe = async (recipe) => {
+    console.log(recipe);
+
+    const likedRecipeModel = {
+      userEmail: user.email,
+      recipeId: recipe.id
+    };
+
+    console.log(JSON.stringify(likedRecipeModel));
+    await authApi(user).post(`${URL}/userLikedRecipe`, JSON.stringify(likedRecipeModel));
   };
 
   async function handleSearchChange(q) {
@@ -144,7 +156,10 @@ export default function SearchRecipe() {
               <p>{el.wattage}$</p>
             </div>
             <div className="col">
-              <img style={{ width: 200 }} src={`data:image/jpeg;base64,${el.imageData}`} alt="" />
+              <img style={{ height: 150 }} src={`data:image/jpeg;base64,${el.imageData}`} alt="" />
+              <Button color="primary" onClick={() => handleLikeRecipe(el)}>
+                Like recipe
+              </Button>
             </div>
           </div>
         ))}
