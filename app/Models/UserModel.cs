@@ -15,9 +15,9 @@ public class UserModel
 
     public float ElectricityPrice { get; set; }
 
-    public AllergensModel Allergens { get; set; } = null!;
+    public virtual AllergensModel Allergens { get; set; } = null!;
 
-    public ICollection<UserLikedRecipeModel> UserLikedRecipe { get; set; } = null!;
+    public virtual ICollection<UserLikedRecipeModel> UserLikedRecipe { get; set; } = null!;
 
-    public ICollection<UserOwnedApplianceModel> UserOwnedAppliance { get; set; } = null!;
+    public virtual ICollection<UserOwnedApplianceModel> UserOwnedAppliance { get; set; } = null!;
 }

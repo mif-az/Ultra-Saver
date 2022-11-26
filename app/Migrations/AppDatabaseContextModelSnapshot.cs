@@ -56,7 +56,7 @@ namespace Ultra_Saver.Migrations
 
                     b.HasKey("Email");
 
-                    b.ToTable("Allergens");
+                    b.ToTable("Allergens", (string)null);
                 });
 
             modelBuilder.Entity("Ultra_Saver.Models.ApplianceModel", b =>
@@ -77,7 +77,7 @@ namespace Ultra_Saver.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Appliance");
+                    b.ToTable("Appliance", (string)null);
                 });
 
             modelBuilder.Entity("Ultra_Saver.Models.ChatMessageModel", b =>
@@ -105,7 +105,7 @@ namespace Ultra_Saver.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ChatMessage");
+                    b.ToTable("ChatMessage", (string)null);
                 });
 
             modelBuilder.Entity("Ultra_Saver.Models.IngredientModel", b =>
@@ -124,7 +124,7 @@ namespace Ultra_Saver.Migrations
 
                     b.HasKey("Name", "CookingMethod");
 
-                    b.ToTable("Ingredient");
+                    b.ToTable("Ingredient", (string)null);
                 });
 
             modelBuilder.Entity("Ultra_Saver.Models.OldRecipeModel", b =>
@@ -151,7 +151,7 @@ namespace Ultra_Saver.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Recipe");
+                    b.ToTable("Recipe", (string)null);
                 });
 
             modelBuilder.Entity("Ultra_Saver.Models.RecipeIngredientModel", b =>
@@ -179,7 +179,7 @@ namespace Ultra_Saver.Migrations
 
                     b.HasIndex("IngredientName", "IngredientCookingMethod");
 
-                    b.ToTable("RecipeIngredient");
+                    b.ToTable("RecipeIngredient", (string)null);
                 });
 
             modelBuilder.Entity("Ultra_Saver.Models.RecipeModel", b =>
@@ -214,7 +214,7 @@ namespace Ultra_Saver.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Recipes");
+                    b.ToTable("Recipes", (string)null);
                 });
 
             modelBuilder.Entity("Ultra_Saver.Models.UserLikedRecipeModel", b =>
@@ -238,7 +238,7 @@ namespace Ultra_Saver.Migrations
 
                     b.HasIndex("UserEmail");
 
-                    b.ToTable("UserLikedRecipe");
+                    b.ToTable("UserLikedRecipe", (string)null);
                 });
 
             modelBuilder.Entity("Ultra_Saver.Models.UserModel", b =>
@@ -254,7 +254,7 @@ namespace Ultra_Saver.Migrations
 
                     b.HasKey("Email");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("Ultra_Saver.Models.UserOwnedApplianceModel", b =>
@@ -281,7 +281,7 @@ namespace Ultra_Saver.Migrations
 
                     b.HasIndex("UserEmail");
 
-                    b.ToTable("UserOwnedAppliance");
+                    b.ToTable("UserOwnedAppliance", (string)null);
                 });
 
             modelBuilder.Entity("Ultra_Saver.Models.UserPropsModel", b =>
@@ -294,7 +294,7 @@ namespace Ultra_Saver.Migrations
 
                     b.HasKey("email");
 
-                    b.ToTable("Properties");
+                    b.ToTable("Properties", (string)null);
                 });
 
             modelBuilder.Entity("Ultra_Saver.Models.AllergensModel", b =>

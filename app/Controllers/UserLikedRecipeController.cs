@@ -16,12 +16,45 @@ public class UserLikedRecipeController : ControllerBase
 {
     private readonly AppDatabaseContext _db;
 
+    public UserLikedRecipeController(AppDatabaseContext db, ILogger<RecipeController> logger, IStatisticsProcessorFactory statisticsProcessorFactory, IEnergyCostAlgorithm energyCostAlgorithm)
+    {
+        _db = db;
+    }
+
     [HttpPost]
     [Authorize]
-    public IActionResult LikeRecipe(UserLikedRecipeModel recipe) //For upserting we need the full model information (id can be ommited for creating a new recipe)
+    public IActionResult LikeRecipe(UserLikedRecipeDTO postRequest)
     {
-        _db.UserLikedRecipe.Add(recipe);
-        _db.SaveChanges();
-        return Ok();
+        var user = _db.User.Find(postRequest.UserEmail);
+        var recipe = _db.Recipes.Find(postRequest.RecipeId);
+
+        if (user == null || recipe == null)
+        {
+            return BadRequest();
+        }
+
+        UserLikedRecipeModel recipeModel = new UserLikedRecipeModel
+        {
+            Id = postRequest.Id,
+            UserEmail = postRequest.UserEmail,
+            RecipeId = postRequest.RecipeId,
+            User = user,
+            Recipe = recipe
+        };
+
+        IQueryable<UserLikedRecipeModel> existingUserLikedRecipe = (from r in _db.UserLikedRecipe
+                                                                    where r.RecipeId == recipe.Id && r.UserEmail == user.Email
+                                                                    select r);
+
+        if (!existingUserLikedRecipe.Any()) // Add liked recipe to database if it hasn't been liked before
+        {
+            _db.UserLikedRecipe.Add(recipeModel);
+            _db.SaveChanges();
+            return Ok();
+        }
+        else
+        {
+            return BadRequest();
+        }
     }
 }
