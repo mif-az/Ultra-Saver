@@ -15,15 +15,17 @@ namespace Ultra_Saver;
 public class UserLikedRecipeController : ControllerBase
 {
     private readonly AppDatabaseContext _db;
+    private readonly ILogger<UserLikedRecipeController> _logger;
 
-    public UserLikedRecipeController(AppDatabaseContext db, ILogger<RecipeController> logger, IStatisticsProcessorFactory statisticsProcessorFactory, IEnergyCostAlgorithm energyCostAlgorithm)
+    public UserLikedRecipeController(AppDatabaseContext db, ILogger<UserLikedRecipeController> logger)
     {
         _db = db;
+        _logger = logger;
     }
 
     [HttpGet]
     [Authorize]
-    public IActionResult GetLikedRecipes(uint page = 1)
+    public IActionResult GetLikedRecipes(uint page = 1, string? filter = null)
     {
         if (page < 1)
         {
@@ -31,10 +33,15 @@ public class UserLikedRecipeController : ControllerBase
         }
 
         string? userEmail = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim();
-
         IQueryable<RecipeModel> userLikedRecipes = (from recipes in _db.UserLikedRecipe
                                                     where recipes.UserEmail == userEmail
                                                     select recipes.Recipe);
+
+        if (filter != null)
+        {
+            string str = filter.map(letter => $".*?{Regex.Escape(letter.ToString().ToLower())}.*?");
+            return Ok(_db.Recipes.Where(c => Regex.IsMatch(c.Name.ToLower(), str)).Take(AppDatabaseContext.ItemsPerPage));
+        }
 
         return Ok(userLikedRecipes.Skip(((int)(page) - 1) * AppDatabaseContext.ItemsPerPage).Take(AppDatabaseContext.ItemsPerPage));
     }
@@ -66,13 +73,45 @@ public class UserLikedRecipeController : ControllerBase
 
         if (!existingUserLikedRecipe.Any()) // Add liked recipe to database if it hasn't been liked before
         {
-            _db.UserLikedRecipe.Add(recipeModel);
-            _db.SaveChanges();
-            return Ok();
+            try
+            {
+                _db.UserLikedRecipe.Add(recipeModel);
+                _db.SaveChanges();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning(e, "Error adding liked recipe to db.");
+                return StatusCode(500);
+            }
         }
         else
         {
             return BadRequest();
+        }
+    }
+
+    [HttpDelete]
+    [Authorize]
+    public IActionResult UnlikeRecipe(UserLikedRecipeDTO recipeDTO)
+    {
+        UserLikedRecipeModel likedRecipeModel;
+
+        try
+        {
+            IQueryable<UserLikedRecipeModel> existingUserLikedRecipe = (from r in _db.UserLikedRecipe
+                                                                        where r.RecipeId == recipeDTO.RecipeId && r.UserEmail == recipeDTO.UserEmail
+                                                                        select r);
+
+            likedRecipeModel = existingUserLikedRecipe.First();
+            _db.Remove(likedRecipeModel);
+            _db.SaveChanges();
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            _logger.LogWarning(e, "Error deleting liked recipe from db.");
+            return StatusCode(500);
         }
     }
 }

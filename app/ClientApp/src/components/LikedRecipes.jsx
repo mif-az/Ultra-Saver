@@ -57,18 +57,6 @@ export default function LikedRecipes() {
     setRecipes(data);
   };
 
-  const handleLikeRecipe = async (recipe) => {
-    console.log(recipe);
-
-    const likedRecipeModel = {
-      userEmail: user.email,
-      recipeId: recipe.id
-    };
-
-    console.log(JSON.stringify(likedRecipeModel));
-    await authApi(user).post(`${URL}/userLikedRecipe`, JSON.stringify(likedRecipeModel));
-  };
-
   async function handleSearchChange(q) {
     const data = await fetchData(q);
     setQuery(q);
@@ -87,6 +75,16 @@ export default function LikedRecipes() {
     const data = await fetchData(query);
     updateAndSetRecipes(data, sortOption, tempFilters);
   }
+
+  const handleUnlikingRecipe = async (recipe) => {
+    const likedRecipeModel = {
+      userEmail: user.email,
+      recipeId: recipe.id
+    };
+
+    await authApi(user).delete(`${URL}/userLikedRecipe`, JSON.stringify(likedRecipeModel));
+    await handleSearchChange(query);
+  };
   // Call fetch data on first render to not have an empty list on start
   useEffect(() => {
     const initialFetchData = async () => {
@@ -165,8 +163,8 @@ export default function LikedRecipes() {
               </div>
             </div>
             <div className="row">
-              <Button color="primary" onClick={() => handleLikeRecipe(el)}>
-                Like recipe
+              <Button color="danger" onClick={() => handleUnlikingRecipe(el)}>
+                Unlike recipe
               </Button>
             </div>
           </div>
