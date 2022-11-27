@@ -3,7 +3,7 @@ import { Button, Input, Label } from 'reactstrap';
 import { authApi, UserContext } from '../contexts/UserProvider';
 import URL from '../appUrl';
 
-export default function SearchRecipe() {
+export default function LikedRecipes() {
   const [recipes, setRecipes] = useState([]);
   const [query, setQuery] = useState('');
   const [sortOption, setSortOption] = useState();
@@ -29,7 +29,7 @@ export default function SearchRecipe() {
   ];
 
   async function fetchData(q) {
-    const response = await authApi(user).get(`${URL}/recipe?filter=${q}`);
+    const response = await authApi(user).get(`${URL}/userLikedRecipe?filter=${q}`);
     const data = await response.json();
     console.log(data);
     return data;

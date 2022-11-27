@@ -20,6 +20,9 @@ export default function Welcome() {
         <DropdownItem tag={Link} to="/searchrecipe" className="text-dark">
           Search Recipes
         </DropdownItem>
+        <DropdownItem tag={Link} to="/likedrecipes" className="text-dark">
+          Liked Recipes
+        </DropdownItem>
       </DropdownMenu>
     </UncontrolledDropdown>
   );

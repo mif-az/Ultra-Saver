@@ -21,6 +21,24 @@ public class UserLikedRecipeController : ControllerBase
         _db = db;
     }
 
+    [HttpGet]
+    [Authorize]
+    public IActionResult GetLikedRecipes(uint page = 1)
+    {
+        if (page < 1)
+        {
+            return BadRequest();
+        }
+
+        string? userEmail = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim();
+
+        IQueryable<RecipeModel> userLikedRecipes = (from recipes in _db.UserLikedRecipe
+                                                    where recipes.UserEmail == userEmail
+                                                    select recipes.Recipe);
+
+        return Ok(userLikedRecipes.Skip(((int)(page) - 1) * AppDatabaseContext.ItemsPerPage).Take(AppDatabaseContext.ItemsPerPage));
+    }
+
     [HttpPost]
     [Authorize]
     public IActionResult LikeRecipe(UserLikedRecipeDTO postRequest)
