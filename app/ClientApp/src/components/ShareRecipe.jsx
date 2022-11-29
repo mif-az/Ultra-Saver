@@ -11,8 +11,10 @@ import {
   FormText
 } from 'reactstrap';
 import URL from '../appUrl';
+import { LanguageContext } from '../contexts/LanguageProvider';
 
 import { authApi, UserContext } from '../contexts/UserProvider';
+import all from './Texts/all';
 
 export default function ShareRecipe() {
   const [recipeTitle, setRecipeTitle] = useState('');
@@ -29,6 +31,7 @@ export default function ShareRecipe() {
   const [inputValidity, setInputValidity] = useState(true);
   const [imageData, setImageData] = useState();
   const [user] = useContext(UserContext);
+  const [lang] = useContext(LanguageContext);
 
   const isNumber = (input) => !Number.isNaN(+input); // isNaN returns true if the input is NOT a number, so we have to negate
   const isEmptyString = (str) => str.length === 0;
@@ -130,7 +133,7 @@ export default function ShareRecipe() {
       <h1>Sharing recipe Demo</h1>
       <Form onSubmit={handleSubmit} className="form">
         <FormGroup>
-          <Label>Recipe name</Label>
+          <Label> {all.share_recipe_label_name[lang]} </Label>
           <Input
             name="recipeName"
             id="recipeName"
@@ -138,10 +141,10 @@ export default function ShareRecipe() {
             value={recipeTitle}
             invalid={isEmptyString(recipeTitle)}
           />
-          <FormFeedback invalid>Your recipe must have a name!</FormFeedback>
+          <FormFeedback invalid> {all.share_recipe_validation_name[lang]} </FormFeedback>
         </FormGroup>
         <FormGroup>
-          <Label sm={2}>Short Recipe Description</Label>
+          <Label sm={2}> {all.share_recipe_label_desc[lang]} </Label>
           <Input
             type="textarea"
             name="text"
@@ -150,16 +153,16 @@ export default function ShareRecipe() {
             value={description}
             invalid={isEmptyString(description)}
           />
-          <FormFeedback invalid>Your recipe must have a description!</FormFeedback>
+          <FormFeedback invalid> {all.share_recipe_validation_desc[lang]} </FormFeedback>
         </FormGroup>
-        <Label>Ingredients</Label>
+        <Label> {all.share_recipe_label_ingredients[lang]} </Label>
         {ingredients.map((element, index) => (
           // change later from index to some sort of ID system
           // eslint-disable-next-line react/no-array-index-key
           <div className="form-row mb-4" key={index}>
             <Row>
               <Col>
-                <Label sm={2}>Ingredient name</Label>
+                <Label sm={2}> {all.share_recipe_label_ingredient_name[lang]} </Label>
                 <FormGroup>
                   <Input
                     type="textarea"
@@ -169,11 +172,14 @@ export default function ShareRecipe() {
                     value={ingredients[index].ingredientName}
                     invalid={isEmptyString(ingredients[index].ingredientName)}
                   />
-                  <FormFeedback invalid>Your ingredient must have a name!</FormFeedback>
+                  <FormFeedback invalid>
+                    {' '}
+                    {all.share_recipe_validation_ingredient_name[lang]}{' '}
+                  </FormFeedback>
                 </FormGroup>
               </Col>
               <Col>
-                <Label sm={2}>Ingredient Amount</Label>
+                <Label sm={2}> {all.share_recipe_label_name_ingredient_amount[lang]} </Label>
                 <FormGroup>
                   <Input
                     type="textarea"
@@ -187,7 +193,7 @@ export default function ShareRecipe() {
                 </FormGroup>
               </Col>
               <Col>
-                <Label sm={2}>Ingredient preparation method</Label>
+                <Label sm={2}> {all.share_recipe_label_name_ingredient_prep[lang]} </Label>
                 <FormGroup>
                   <Input
                     type="select"
@@ -204,7 +210,7 @@ export default function ShareRecipe() {
               </Col>
             </Row>
             <Row>
-              <Label sm={2}>Please describe how this ingredient is prepared</Label>
+              <Label sm={2}> {all.share_recipe_label_explanation[lang]} </Label>
               <FormGroup>
                 <Input
                   type="textarea"
@@ -213,9 +219,7 @@ export default function ShareRecipe() {
                   value={ingredients[index].ingredientPreparation}
                   invalid={isEmptyString(ingredients[index].ingredientPreparation)}
                 />
-                <FormFeedback invalid>
-                  Your ingredient must have an explanation how to prepare it!
-                </FormFeedback>
+                <FormFeedback invalid>{all.share_recipe_validation_explanation[lang]}</FormFeedback>
               </FormGroup>
               {ingredients.length > 1 && (
                 <div>
@@ -234,7 +238,7 @@ export default function ShareRecipe() {
           +
         </Button>{' '}
         <FormGroup>
-          <Label sm={2}>Detailed instructions</Label>
+          <Label sm={2}> {all.share_recipe_label_intr[lang]} </Label>
           <Input
             type="textarea"
             name="text"
@@ -243,14 +247,14 @@ export default function ShareRecipe() {
             value={instructions}
             invalid={isEmptyString(instructions)}
           />
-          <FormFeedback invalid>Your recipe must have instructions!</FormFeedback>
+          <FormFeedback invalid> {all.share_recipe_validation_intr[lang]} </FormFeedback>
         </FormGroup>
         <FormGroup>
-          <Label>Recipe picture</Label>
+          <Label> {all.share_recipe_label_picture[lang]} </Label>
           <Input type="file" name="file" onChange={(event) => handlePictureUpload(event)} />
-          <FormText color="muted">Upload your recipes picture</FormText>
+          <FormText color="muted"> {all.share_recipe_validation_picture[lang]} </FormText>
         </FormGroup>
-        <Button disabled={!inputValidity}>Submit</Button>
+        <Button disabled={!inputValidity}> {all.share_recipe_button_send[lang]} </Button>
       </Form>
     </>
   );

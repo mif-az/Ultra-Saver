@@ -2,8 +2,11 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Button, Input, Label } from 'reactstrap';
 import { authApi, UserContext } from '../contexts/UserProvider';
 import URL from '../appUrl';
+import all from './Texts/all';
+import { LanguageContext } from '../contexts/LanguageProvider';
 
 export default function SearchRecipe() {
+  const [lang] = useContext(LanguageContext);
   const [recipes, setRecipes] = useState([]);
   const [query, setQuery] = useState('');
   const [sortOption, setSortOption] = useState();
@@ -15,15 +18,15 @@ export default function SearchRecipe() {
 
   const sortOptions = [
     {
-      label: 'Alphabetically',
+      label: all.search_recipe_dropdown_sortby_alpha[lang],
       value: 'name'
     },
     {
-      label: 'Lowest time',
+      label: all.search_recipe_dropdown_sortby_time[lang],
       value: 'fullPrepTime'
     },
     {
-      label: 'Lowest price',
+      label: all.search_recipe_dropdown_sortby_price[lang],
       value: 'wattage'
     }
   ];
@@ -101,7 +104,7 @@ export default function SearchRecipe() {
     <div className="container">
       <div className="row">
         <div className="col-6">
-          <Label>Search bar</Label>
+          <Label> {all.search_recipe_label_search[lang]} </Label>
           <Input
             type="text"
             onChange={(e) => {
@@ -110,7 +113,7 @@ export default function SearchRecipe() {
           />
         </div>
         <div className="col-3">
-          <Label>Sort by</Label>
+          <Label> {all.search_recipe_label_sortby[lang]} </Label>
           <Input
             type="select"
             name="select"
@@ -124,7 +127,7 @@ export default function SearchRecipe() {
         </div>
         <div className="row">
           <div className="col">
-            <Label>Price filter</Label>
+            <Label> {all.search_recipe_label_pricefilter[lang]} </Label>
             <Input
               type="text"
               onChange={(e) => {
@@ -133,7 +136,7 @@ export default function SearchRecipe() {
             />
           </div>
           <div className="col">
-            <Label>Time filter</Label>
+            <Label> {all.search_recipe_label_timefilter[lang]} </Label>
             <Input
               type="text"
               onChange={(e) => {
