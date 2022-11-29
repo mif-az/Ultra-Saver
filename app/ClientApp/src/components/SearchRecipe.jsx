@@ -3,7 +3,8 @@ import { Button, Input, Label } from 'reactstrap';
 import { authApi, UserContext } from '../contexts/UserProvider';
 import URL from '../appUrl';
 
-export default function SearchRecipe() {
+// eslint-disable-next-line react/prop-types
+export default function SearchRecipe({ request, likedRecipes }) {
   const [recipes, setRecipes] = useState([]);
   const [query, setQuery] = useState('');
   const [sortOption, setSortOption] = useState();
@@ -29,7 +30,7 @@ export default function SearchRecipe() {
   ];
 
   async function fetchData(q) {
-    const response = await authApi(user).get(`${URL}/recipe?filter=${q}`);
+    const response = await authApi(user).get(`${URL}/${request}?filter=${q}`);
     const data = await response.json();
     console.log(data);
     return data;
@@ -57,18 +58,6 @@ export default function SearchRecipe() {
     setRecipes(data);
   };
 
-  const handleLikeRecipe = async (recipe) => {
-    console.log(recipe);
-
-    const likedRecipeModel = {
-      userEmail: user.email,
-      recipeId: recipe.id
-    };
-
-    console.log(JSON.stringify(likedRecipeModel));
-    await authApi(user).post(`${URL}/userLikedRecipe`, JSON.stringify(likedRecipeModel));
-  };
-
   async function handleSearchChange(q) {
     const data = await fetchData(q);
     setQuery(q);
@@ -87,6 +76,19 @@ export default function SearchRecipe() {
     const data = await fetchData(query);
     updateAndSetRecipes(data, sortOption, tempFilters);
   }
+
+  const handleLikeRecipe = async (recipe) => {
+    const likedRecipeModel = {
+      userEmail: user.email,
+      recipeId: recipe.id
+    };
+
+    if (likedRecipes) {
+      await authApi(user).delete(`${URL}/userLikedRecipe`, JSON.stringify(likedRecipeModel));
+      await handleSearchChange(query);
+    } else await authApi(user).post(`${URL}/userLikedRecipe`, JSON.stringify(likedRecipeModel));
+  };
+
   // Call fetch data on first render to not have an empty list on start
   useEffect(() => {
     const initialFetchData = async () => {
@@ -95,7 +97,22 @@ export default function SearchRecipe() {
       setRecipes(data);
     };
     initialFetchData();
-  }, []); // second argument makes useEffect call fetchData() only on first render
+  }, [request, likedRecipes]); // second argument makes useEffect call fetchData() only on first render
+
+  const likeButton = (el) => {
+    if (likedRecipes) {
+      return (
+        <Button color="danger" onClick={() => handleLikeRecipe(el)}>
+          Unlike recipe
+        </Button>
+      );
+    }
+    return (
+      <Button color="primary" onClick={() => handleLikeRecipe(el)}>
+        Like recipe
+      </Button>
+    );
+  };
 
   return (
     <div className="container">
@@ -164,11 +181,7 @@ export default function SearchRecipe() {
                 />
               </div>
             </div>
-            <div className="row">
-              <Button color="primary" onClick={() => handleLikeRecipe(el)}>
-                Like recipe
-              </Button>
-            </div>
+            <div className="row">{likeButton(el)}</div>
           </div>
         ))}
       </div>
