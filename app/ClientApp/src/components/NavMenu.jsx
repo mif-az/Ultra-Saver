@@ -66,6 +66,11 @@ export default class NavMenu extends Component {
               </NavItem>
               <Chat />
               <Recipes />
+              <NavItem>
+                <NavLink tag={Link} className="text-dark" to="/countdowntimer">
+                  Timer
+                </NavLink>
+              </NavItem>
               <Account />
               <LanguageSwitcher />
             </ul>
