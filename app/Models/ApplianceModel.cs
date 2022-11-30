@@ -14,5 +14,5 @@ public class ApplianceModel
 
     public string Name { get; set; } = "";
 
-    public ICollection<UserOwnedApplianceModel> UserOwnedAppliance { get; set; } = null!;
+    public virtual ICollection<UserOwnedApplianceModel> UserOwnedAppliance { get; set; } = null!;
 }

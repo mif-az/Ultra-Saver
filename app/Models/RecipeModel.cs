@@ -22,9 +22,9 @@ public class RecipeModel : Model<string>
 
     public byte[] ImageData { get; set; } = null!;
 
-    public ICollection<UserLikedRecipeModel> UserLikedRecipe { get; set; } = null!;
+    public virtual ICollection<UserLikedRecipeModel> UserLikedRecipe { get; set; } = null!;
 
-    public ICollection<RecipeIngredientModel> RecipeIngredient { get; set; } = null!;
+    public virtual ICollection<RecipeIngredientModel> RecipeIngredient { get; set; } = null!;
 
     public override string GetSignature()
     {

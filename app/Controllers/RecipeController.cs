@@ -44,7 +44,7 @@ public class RecipeController : ControllerBase
 
     [HttpGet]
     [Authorize]
-    public IActionResult GetRecipies(uint page = 1, string? filter = null) // Query parameter with default value
+    public IActionResult GetRecipes(uint page = 1, string? filter = null) // Query parameter with default value
     {
         if (page < 1)
         {

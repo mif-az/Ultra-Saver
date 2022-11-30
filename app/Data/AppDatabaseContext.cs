@@ -26,12 +26,12 @@ public class AppDatabaseContext : DbContext
        .HasKey(ab => new { ab.Id });
 
         modelBuilder.Entity<UserLikedRecipeModel>()
-            .HasOne(ab => ab.User)
+            .HasOne<UserModel>(ab => ab.User)
             .WithMany(b => b.UserLikedRecipe)
             .HasForeignKey(ab => ab.UserEmail);
 
         modelBuilder.Entity<UserLikedRecipeModel>()
-            .HasOne(ab => ab.Recipe)
+            .HasOne<RecipeModel>(ab => ab.Recipe)
             .WithMany(a => a.UserLikedRecipe)
             .HasForeignKey(ab => ab.RecipeId);
 

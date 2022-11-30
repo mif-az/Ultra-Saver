@@ -23,6 +23,9 @@ export default function Welcome() {
         <DropdownItem tag={Link} to="/searchrecipe" className="text-dark">
           {all.all_navbar_recipes_search[lang]}
         </DropdownItem>
+        <DropdownItem tag={Link} to="/likedrecipes" className="text-dark">
+          Liked Recipes
+        </DropdownItem>
       </DropdownMenu>
     </UncontrolledDropdown>
   );
