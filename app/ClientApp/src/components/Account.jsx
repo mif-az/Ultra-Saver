@@ -9,9 +9,12 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { UserContext, RemoveJwtToken } from '../contexts/UserProvider';
+import all from './Texts/all';
+import { LanguageContext } from '../contexts/LanguageProvider';
 
 export default function Welcome() {
   const [user, setUser] = useContext(UserContext);
+  const [lang] = useContext(LanguageContext);
 
   const HandleLogOut = () => {
     RemoveJwtToken(setUser);
@@ -40,11 +43,11 @@ export default function Welcome() {
       </DropdownToggle>
       <DropdownMenu end>
         <DropdownItem tag={Link} to="/accountsettings" className="text-dark">
-          Account Settings
+          {all.all_navbar_acc_settings[lang]}
         </DropdownItem>
         <div className="d-flex justify-content-center">
           <DropdownItem tag={Link} to="/" onClick={HandleLogOut}>
-            Sign Out
+            {all.all_navbar_signout[lang]}
           </DropdownItem>
         </div>
       </DropdownMenu>

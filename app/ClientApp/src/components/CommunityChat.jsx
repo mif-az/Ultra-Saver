@@ -5,6 +5,8 @@ import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { React, useContext, useEffect, useState } from 'react';
 import { authApi, UserContext } from '../contexts/UserProvider';
 import URL from '../appUrl';
+import { LanguageContext } from '../contexts/LanguageProvider';
+import all from './Texts/all';
 
 export default function ChatExample() {
   const [user] = useContext(UserContext);
@@ -12,6 +14,7 @@ export default function ChatExample() {
   const [input, setInput] = useState(null);
   const [msgStatus, setMsgStatus] = useState({ sending: false });
   const [messages, setMessages] = useState([]);
+  const [lang] = useContext(LanguageContext);
   // const [time, setTime] = useState();
   // const date = new Date();
 
@@ -90,7 +93,7 @@ export default function ChatExample() {
             type="button"
             className="btn btn-primary col-1"
             onClick={(e) => handleSendMessage(e)}>
-            Send
+            {all.chat_button_send[lang]}
           </button>
         </div>
       </div>

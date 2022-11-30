@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import AppRoutes from './AppRoutes';
 import { Layout } from './components/Layout';
+import { LanguageProvider } from './contexts/LanguageProvider';
 import { UserProvider } from './contexts/UserProvider';
 import './custom.css';
 
@@ -14,15 +15,17 @@ export default class App extends Component {
     return (
       // We wrap everything with UserProvider because UserProvider is what provides the global user state
       <UserProvider>
-        <Layout>
-          <Routes>
-            {AppRoutes.map((route, index) => {
-              const { element, ...rest } = route;
-              // eslint-disable-next-line react/no-array-index-key, react/jsx-props-no-spreading
-              return <Route key={index} {...rest} element={element} />;
-            })}
-          </Routes>
-        </Layout>
+        <LanguageProvider>
+          <Layout>
+            <Routes>
+              {AppRoutes.map((route, index) => {
+                const { element, ...rest } = route;
+                // eslint-disable-next-line react/no-array-index-key, react/jsx-props-no-spreading
+                return <Route key={index} {...rest} element={element} />;
+              })}
+            </Routes>
+          </Layout>
+        </LanguageProvider>
       </UserProvider>
     );
   }

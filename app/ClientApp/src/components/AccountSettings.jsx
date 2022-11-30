@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Button, Form, FormGroup, FormFeedback, Input, Label, Row, Col } from 'reactstrap';
+import { LanguageContext } from '../contexts/LanguageProvider';
+import all from './Texts/all';
 
 export default function AccountSettings() {
   const [electricityPrice, setElectricityPrice] = useState('');
+  const [lang] = useContext(LanguageContext);
   const [appliances, setAppliances] = useState([{ applianceName: '', applianceWattage: '' }]);
   const [inputValidity, setInputValidity] = useState(true);
   const [preferences, setPreferences] = useState({
@@ -19,7 +22,7 @@ export default function AccountSettings() {
 
   const isNumber = (input) => !Number.isNaN(+input); // isNaN returns true if the input is NOT a number, so we have to negate
   const isEmptyString = (str) => str.length === 0;
-  const capitalizeFirstLetter = (str) => str.substring(0, 1).toUpperCase() + str.substring(1);
+  // const capitalizeFirstLetter = (str) => str.substring(0, 1).toUpperCase() + str.substring(1);
 
   const isInputValid = () => {
     if (!isNumber(electricityPrice)) {
@@ -79,7 +82,7 @@ export default function AccountSettings() {
           onChange={(event) => handlePreferencesChange(event, preference)}
           value={preferences[preference]}
         />
-        {capitalizeFirstLetter(preference)}
+        {all[`account_settings_checkbox_${preference}`][lang]}
       </Label>
     </FormGroup>
   );
@@ -90,10 +93,10 @@ export default function AccountSettings() {
 
   return (
     <>
-      <h1>Account settings</h1>
+      <h1> {all.all_navbar_acc_settings[lang]} </h1>
       <Form onSubmit={handleSubmit} className="form">
         <FormGroup>
-          <Label>Electricity price (eur/kwh)</Label>
+          <Label>{all.account_settings_label_electricity_price[lang]} (eur/kwh)</Label>
           <Input
             name="electricityPrice"
             id="electricityPrice"
@@ -103,14 +106,14 @@ export default function AccountSettings() {
           />
           <FormFeedback invalid>Your input has to be a number!</FormFeedback>
         </FormGroup>
-        <Label>Owned Appliances</Label>
+        <Label>{all.account_settings_label_apliances[lang]}</Label>
         {appliances.map((element, index) => (
           // change later from index to some sort of ID system
           // eslint-disable-next-line react/no-array-index-key
           <div className="form-row" key={index}>
             <Row>
               <Col>
-                <Label sm={2}>Appliance name</Label>
+                <Label sm={2}> {all.account_settings_label_appliance_name[lang]} </Label>
                 <FormGroup>
                   <Input
                     type="textarea"
@@ -120,11 +123,13 @@ export default function AccountSettings() {
                     value={appliances[index].applianceName}
                     invalid={isEmptyString(appliances[index].applianceName)}
                   />
-                  <FormFeedback invalid>The appliance has to have a name!</FormFeedback>
+                  <FormFeedback invalid>
+                    {all.account_settings_validation_appliance_name[lang]}
+                  </FormFeedback>
                 </FormGroup>
               </Col>
               <Col>
-                <Label sm={2}>Appliance Wattage</Label>
+                <Label sm={2}>{all.account_settings_label_appliance_wattage[lang]}</Label>
                 <FormGroup>
                   <Input
                     type="textarea"
@@ -156,7 +161,7 @@ export default function AccountSettings() {
         <div className="row">
           {Object.keys(preferences).map((preference) => generatePreferenceCheckbox(preference))}
         </div>
-        <Button disabled={!inputValidity}>Submit</Button>
+        <Button disabled={!inputValidity}>{all.all_button_save[lang]}</Button>
       </Form>
     </>
   );

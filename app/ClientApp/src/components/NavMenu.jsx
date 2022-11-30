@@ -7,10 +7,16 @@ import Welcome from './Welcome';
 import Account from './Account';
 import Recipes from './Recipes';
 import Chat from './Chat';
+import LanguageSwitcher from './LanguageSwitcher';
+import { LanguageContext } from '../contexts/LanguageProvider';
+import all from './Texts/all';
 
 export default class NavMenu extends Component {
   // eslint-disable-next-line react/static-property-placement
   static displayName = NavMenu.name;
+
+  // eslint-disable-next-line react/static-property-placement
+  static contextType = LanguageContext;
 
   constructor(props) {
     super(props);
@@ -31,6 +37,7 @@ export default class NavMenu extends Component {
   }
 
   render() {
+    const [lang] = this.context;
     return (
       <header>
         <Navbar
@@ -49,17 +56,18 @@ export default class NavMenu extends Component {
             <ul className="navbar-nav flex-grow">
               <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/user/properties">
-                  Properties
+                  {all.all_navbar_properties[lang]}
                 </NavLink>
               </NavItem>
               <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/energycalculation">
-                  Energy Cost
+                  {all.all_navbar_energy_cost[lang]}
                 </NavLink>
               </NavItem>
               <Chat />
               <Recipes />
               <Account />
+              <LanguageSwitcher />
             </ul>
           </Collapse>
         </Navbar>

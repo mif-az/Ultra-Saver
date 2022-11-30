@@ -42,7 +42,7 @@ export const UserContext = React.createContext({
 export function UserProvider({ children }) {
   // useReducer is similar to useState but works a bit differently. It is only needed for the global state
   const [state, dispath] = React.useReducer(
-    (state, action) => staticStateAdditions(action),
+    (_, action) => staticStateAdditions(action),
     initialState
   );
   // All components in {children} will be able to access UserContext and therefore the global user state
