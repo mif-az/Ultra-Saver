@@ -30,5 +30,5 @@ public class AllergensModel
     public bool SoybeanAllergy { get; set; }
 
     [Required]
-    public UserModel User { get; set; } = null!;
+    public virtual UserModel User { get; set; } = null!;
 }

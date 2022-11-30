@@ -69,5 +69,15 @@ export const authApi = (user) => ({
         'Content-type': 'application/json'
       },
       body
+    }),
+  delete: (url, body, method = 'DELETE') =>
+    fetch(url, {
+      method,
+      headers: {
+        // eslint-disable-next-line no-underscore-dangle
+        Authorization: user.header,
+        'Content-type': 'application/json'
+      },
+      body
     })
 });

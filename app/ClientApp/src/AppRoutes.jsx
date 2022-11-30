@@ -32,7 +32,11 @@ const AppRoutes = [
   },
   {
     path: '/searchrecipe',
-    element: <SearchRecipe />
+    element: <SearchRecipe request="recipe" likedRecipes={false} />
+  },
+  {
+    path: '/likedrecipes',
+    element: <SearchRecipe request="userlikedrecipe" likedRecipes />
   },
   {
     path: '/accountsettings',

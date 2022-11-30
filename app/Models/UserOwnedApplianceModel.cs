@@ -16,7 +16,7 @@ public class UserOwnedApplianceModel
 
     public int ApplianceWattage { get; set; }
 
-    public UserModel User { get; set; } = null!;
+    public virtual UserModel User { get; set; } = null!;
 
-    public ApplianceModel Appliance { get; set; } = null!;
+    public virtual ApplianceModel Appliance { get; set; } = null!;
 }

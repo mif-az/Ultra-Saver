@@ -14,7 +14,8 @@ const context = [
   '/energycost',
   '/recipe',
   '/chat/send',
-  '/chat/messages'
+  '/chat/messages',
+  '/userlikedrecipe'
 ];
 
 module.exports = function (app) {
