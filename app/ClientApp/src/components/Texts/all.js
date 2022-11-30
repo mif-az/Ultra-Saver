@@ -56,23 +56,23 @@ export default {
   },
   share_recipe_label_ingredients: {
     en: 'Ingredients',
-    lt: 'Ingridientai'
+    lt: 'Ingredientai'
   },
   share_recipe_label_ingredient_name: {
     en: 'Ingredient',
-    lt: 'Ingridientas'
+    lt: 'Ingredientas'
   },
   share_recipe_label_name_ingredient_amount: {
     en: 'Ingredient Amount',
-    lt: 'Ingridiento kiekis'
+    lt: 'Ingrediento kiekis'
   },
   share_recipe_label_name_ingredient_prep: {
     en: 'Ingredient preparation method',
-    lt: 'Ingridiento paruošimo būdas'
+    lt: 'Ingrediento paruošimo būdas'
   },
   share_recipe_label_explanation: {
     en: 'Ingredient preparation explanation',
-    lt: 'Ingridiento paruošimo aprašymas'
+    lt: 'Ingrediento paruošimo aprašymas'
   },
   share_recipe_label_intr: {
     en: 'Detailed instructions',
@@ -93,11 +93,11 @@ export default {
   },
   share_recipe_validation_ingredient_name: {
     en: 'Your ingredient must have a name!',
-    lt: 'Koks tai ingridientas?'
+    lt: 'Koks tai ingredientas?'
   },
   share_recipe_validation_explanation: {
     en: 'Your ingredient must have an explanation how to prepare it!',
-    lt: 'Kaip paruošti šį ingridientą?'
+    lt: 'Kaip paruošti šį ingredientą?'
   },
   share_recipe_validation_intr: {
     en: 'Your recipe must have instructions!',
