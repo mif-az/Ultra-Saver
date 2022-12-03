@@ -81,15 +81,10 @@ export default function SearchRecipe({ request, likedRecipes }) {
   }
 
   const handleLikeRecipe = async (recipe) => {
-    const likedRecipeModel = {
-      userEmail: user.email,
-      recipeId: recipe.id
-    };
-
     if (likedRecipes) {
-      await authApi(user).delete(`${URL}/userLikedRecipe`, JSON.stringify(likedRecipeModel));
+      await authApi(user).delete(`${URL}/userLikedRecipe?recipeId=${recipe.id}`);
       await handleSearchChange(query);
-    } else await authApi(user).post(`${URL}/userLikedRecipe`, JSON.stringify(likedRecipeModel));
+    } else await authApi(user).post(`${URL}/userLikedRecipe?recipeId=${recipe.id}`);
   };
 
   // Call fetch data on first render to not have an empty list on start

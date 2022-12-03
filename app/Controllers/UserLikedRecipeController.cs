@@ -48,10 +48,12 @@ public class UserLikedRecipeController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public IActionResult LikeRecipe(UserLikedRecipeDTO postRequest)
+    public IActionResult LikeRecipe(int recipeId)
     {
-        var user = _db.User.Find(postRequest.UserEmail);
-        var recipe = _db.Recipes.Find(postRequest.RecipeId);
+        string? userEmail = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim();
+
+        var user = _db.User.Find(userEmail);
+        var recipe = _db.Recipes.Find(recipeId);
 
         if (user == null || recipe == null)
         {
@@ -60,9 +62,8 @@ public class UserLikedRecipeController : ControllerBase
 
         UserLikedRecipeModel recipeModel = new UserLikedRecipeModel
         {
-            Id = postRequest.Id,
-            UserEmail = postRequest.UserEmail,
-            RecipeId = postRequest.RecipeId,
+            UserEmail = userEmail ?? "", // to avoid warning, not sure if thats the best way
+            RecipeId = recipeId,
             User = user,
             Recipe = recipe
         };
