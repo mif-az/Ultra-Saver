@@ -4,6 +4,7 @@ import Login from './components/Login';
 import UserProps from './components/UserProps';
 import ShareRecipe from './components/ShareRecipe';
 import SearchRecipe from './components/SearchRecipe';
+import Recipe from './components/Recipe';
 import EnergyCalculation from './components/EnergyCalculation';
 import AccountSettings from './components/AccountSettings';
 import MessageUi from './components/MessageUi';
@@ -33,6 +34,10 @@ const AppRoutes = [
   {
     path: '/searchrecipe',
     element: <SearchRecipe request="recipe" likedRecipes={false} />
+  },
+  {
+    path: '/r/:recipeId',
+    element: <Recipe />
   },
   {
     path: '/likedrecipes',
