@@ -16,6 +16,8 @@ public class RecipeModel : Model<string>
 
     public int CalorieCount { get; set; }
 
+    public double TotalEnergy { get; set; }
+
     public int FullPrepTime { get; set; }
 
     public string Name { get; set; } = null!;

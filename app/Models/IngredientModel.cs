@@ -14,6 +14,8 @@ public class IngredientModel
 
     public int CookingTime { get; set; }
 
+    public float CookingPowerScale { get; set; } = 1;
+
     public int Price { get; set; }
 
 

@@ -13,7 +13,6 @@ public interface IEnergyCostAlgorithm
 
 public class EnergyCostAlgorithm : IEnergyCostAlgorithm
 {
-    public EnergyCostAlgorithm() { }
     public double TotalEnergy { get; set; } = 0;
     public float GasVolumeUsed { get; set; } = 0;
 

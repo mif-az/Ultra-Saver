@@ -75,6 +75,7 @@ export default function ShareRecipe() {
       calorieCount: 1000, // Calories and full preptime will later be calculated from all the ingredients
       fullPrepTime: 1000,
       imageData,
+      TotalEnergy: 69,
       recipeIngredient: [],
       userLikedRecipe: []
     };

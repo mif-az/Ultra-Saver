@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Button, Form, FormGroup, FormFeedback, Input, Label, Row, Col } from 'reactstrap';
 import { LanguageContext } from '../contexts/LanguageProvider';
+import { authApi, UserContext } from '../contexts/UserProvider';
+import URL from '../appUrl';
 import all from './Texts/all';
 
 export default function AccountSettings() {
@@ -8,6 +10,7 @@ export default function AccountSettings() {
   const [lang] = useContext(LanguageContext);
   const [appliances, setAppliances] = useState([{ applianceName: '', applianceWattage: '' }]);
   const [inputValidity, setInputValidity] = useState(true);
+  const [user] = useContext(UserContext);
   const [preferences, setPreferences] = useState({
     vegetarian: false,
     vegan: false,
@@ -43,11 +46,9 @@ export default function AccountSettings() {
     return true;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault(); // prevents page refresh
-    console.log(electricityPrice);
-    console.log(JSON.stringify(appliances));
-    console.log(JSON.stringify(preferences));
+    await authApi(user).post(`${URL}/userallergens`, JSON.stringify(preferences));
   };
 
   const handleFormChange = (event, element) => {

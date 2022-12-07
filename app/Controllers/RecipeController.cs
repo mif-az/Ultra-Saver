@@ -46,6 +46,8 @@ public class RecipeController : ControllerBase
     [Authorize]
     public IActionResult GetRecipes(uint page = 1, string? filter = null) // Query parameter with default value
     {
+        var email = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim();
+        
         if (page < 1)
         {
             return BadRequest();

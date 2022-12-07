@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 namespace Ultra_Saver.Models;
 [ExcludeFromCodeCoverage]
 
-
 public class AllergensModel
 {
     [Key]
@@ -31,4 +30,25 @@ public class AllergensModel
 
     [Required]
     public virtual UserModel User { get; set; } = null!;
+}
+
+public class AllergensDTO
+{
+    public bool Vegetarian { get; set; }
+
+    public bool Vegan { get; set; }
+
+    public bool DairyAllergy { get; set; }
+
+    public bool EggsAllergy { get; set; }
+
+    public bool FishAllergy { get; set; }
+
+    public bool ShellfishAllergy { get; set; }
+
+    public bool NutsAllergy { get; set; }
+
+    public bool WheatAllergy { get; set; }
+
+    public bool SoybeanAllergy { get; set; }
 }

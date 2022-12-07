@@ -13,7 +13,9 @@ public class UserModel
 
     public bool DarkMode { get; set; } = false;
 
-    public float ElectricityPrice { get; set; }
+    public float ElectricityPrice { get; set; } = 0;
+
+    public float GasPrice { get; set; } = 0;
 
     public virtual AllergensModel Allergens { get; set; } = null!;
 

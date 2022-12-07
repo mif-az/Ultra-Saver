@@ -15,7 +15,8 @@ const context = [
   '/recipe',
   '/chat/send',
   '/chat/messages',
-  '/userlikedrecipe'
+  '/userlikedrecipe',
+  '/userallergens'
 ];
 
 module.exports = function (app) {
