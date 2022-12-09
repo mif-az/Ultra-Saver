@@ -21,3 +21,10 @@ public class UserModel
 
     public virtual ICollection<UserOwnedApplianceModel> UserOwnedAppliance { get; set; } = null!;
 }
+
+public class UserDTO
+{
+    public bool DarkMode { get; set; } = false;
+
+    public float ElectricityPrice { get; set; }
+}

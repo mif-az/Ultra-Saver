@@ -36,7 +36,7 @@ public class UserInfoController : ControllerBase
         {
             // If this user logged in for the first time - we call a service that initializes a new user in the database
             _logger.LogInformation("A new user has registered.");
-            _newUserInitService.init(db: _db, email: email);
+            _newUserInitService.Init(db: _db, email: email);
             res = this._db.Properties.Find(email);
         }
 
@@ -45,19 +45,37 @@ public class UserInfoController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public IActionResult setUserInfo(UserPropsModel props)
+    public IActionResult SetUserInfo(UserDTO postRequest)
     {
         var email = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim(); // Get email from the JWT
+        UserModel? user = _db.User.Find(email);
 
         if (email == null)
-            return BadRequest("No email was provided");
+            return BadRequest("Not logged in");
 
-        if (!email.Equals(props.email))
-            return BadRequest("Incorrect identity");
+        UserModel userModel = new UserModel
+        {
+            Email = email,
+            ElectricityPrice = postRequest.ElectricityPrice,
+            DarkMode = postRequest.DarkMode
+        };
 
-        _db.Properties.Update(props);
 
-        return Ok(_db.SaveChanges());
+
+        if (user == null)
+        {
+            _db.User.Add(userModel);
+            _db.SaveChanges();
+        }
+        else
+        {
+            user.ElectricityPrice = userModel.ElectricityPrice;
+            user.DarkMode = userModel.DarkMode;
+            _db.User.Update(user);
+            _db.SaveChanges();
+        }
+
+        return Ok();
     }
 }
 

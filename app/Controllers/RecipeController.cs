@@ -27,6 +27,22 @@ public class RecipeController : ControllerBase
         _energyCostAlgorithm = energyCostAlgorithm;
     }
 
+    [HttpGet("{recipeID}")]
+    public async Task<IActionResult> GetRecipeFromID(int recipeID)
+    {
+        RecipeModel? recipe = _db.Recipes.Find(recipeID);
+
+        if (recipe != null)
+        {
+            return Ok(_db.Recipes.Find(recipeID));
+        }
+        else
+        {
+            return StatusCode(404);
+        }
+
+    }
+
     [HttpGet("stats")]
     public async Task<IActionResult> GetStats()
     {
