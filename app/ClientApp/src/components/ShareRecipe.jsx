@@ -23,8 +23,7 @@ export default function ShareRecipe() {
     {
       ingredientName: '',
       ingredientAmount: '',
-      ingredientPreparationMethod: 'None of the above',
-      ingredientPreparation: ''
+      ingredientPreparationMethod: 'None of the above'
     }
   ]);
   const [instructionSteps, setInstructionSteps] = useState([{ stepInstruction: '' }]);
@@ -243,17 +242,6 @@ export default function ShareRecipe() {
               </Col>
             </Row>
             <Row>
-              <Label sm={2}> {all.share_recipe_label_explanation[lang]} </Label>
-              <FormGroup>
-                <Input
-                  type="textarea"
-                  name="ingredientPreparation"
-                  onChange={(event) => handleIngredientsChange(event, element)}
-                  value={ingredients[index].ingredientPreparation}
-                  invalid={isEmptyString(ingredients[index].ingredientPreparation)}
-                />
-                <FormFeedback invalid>{all.share_recipe_validation_explanation[lang]}</FormFeedback>
-              </FormGroup>
               {ingredients.length > 1 && (
                 <div>
                   <Button color="danger" size="sm" onClick={() => removeIngredient(index)}>
