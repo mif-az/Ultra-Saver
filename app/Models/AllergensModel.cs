@@ -38,17 +38,17 @@ public class AllergensDTO
 
     public bool Vegan { get; set; }
 
-    public bool DairyAllergy { get; set; }
+    public bool Dairy { get; set; }
 
-    public bool EggsAllergy { get; set; }
+    public bool Eggs { get; set; }
 
-    public bool FishAllergy { get; set; }
+    public bool Fish { get; set; }
 
-    public bool ShellfishAllergy { get; set; }
+    public bool Shellfish { get; set; }
 
-    public bool NutsAllergy { get; set; }
+    public bool Nuts { get; set; }
 
-    public bool WheatAllergy { get; set; }
+    public bool Wheat { get; set; }
 
-    public bool SoybeanAllergy { get; set; }
+    public bool Soybean { get; set; }
 }

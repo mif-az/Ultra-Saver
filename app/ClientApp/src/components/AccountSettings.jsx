@@ -48,7 +48,7 @@ export default function AccountSettings() {
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // prevents page refresh
-    await authApi(user).post(`${URL}/userallergens`, JSON.stringify(preferences));
+    await authApi(user).post(`${URL}/userallergens`, preferences);
   };
 
   const handleFormChange = (event, element) => {
