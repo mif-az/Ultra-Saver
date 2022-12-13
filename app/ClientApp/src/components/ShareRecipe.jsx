@@ -26,7 +26,7 @@ export default function ShareRecipe() {
       ingredientPreparationMethod: 'None of the above'
     }
   ]);
-  const [instructionSteps, setInstructionSteps] = useState([{ stepInstruction: '' }]);
+  const [instructionSteps, setInstructionSteps] = useState([{ stepInstruction: '', stepTime: 0 }]);
 
   const [inputValidity, setInputValidity] = useState(true);
   const [imageData, setImageData] = useState();
@@ -67,10 +67,21 @@ export default function ShareRecipe() {
 
   const stringifyInstructionSteps = () => {
     let instructions = '';
+
     for (let i = 0; i < instructionSteps.length; i += 1) {
       instructions = instructions.concat(`${i + 1}. ${instructionSteps[i].stepInstruction}\n`);
     }
     return instructions;
+  };
+
+  const calculatePrepTime = () => {
+    let fullPrepTime = 0;
+
+    for (let i = 0; i < instructionSteps.length; i += 1) {
+      fullPrepTime += instructionSteps[i].stepTime;
+    }
+
+    return fullPrepTime;
   };
 
   const handleSubmit = async (event) => {
@@ -81,7 +92,7 @@ export default function ShareRecipe() {
       instruction: stringifyInstructionSteps(),
       name: recipeTitle,
       calorieCount: 1000, // Calories and full preptime will later be calculated from all the ingredients
-      fullPrepTime: 1000,
+      fullPrepTime: calculatePrepTime(),
       imageData,
       recipeIngredient: [],
       userLikedRecipe: []
@@ -125,8 +136,7 @@ export default function ShareRecipe() {
     tempIngredients.push({
       ingredientName: '',
       ingredientAmount: '',
-      ingredientPreparationMethod: 'None of the above',
-      ingredientPreparation: ''
+      ingredientPreparationMethod: 'None of the above'
     });
     setIngredients(tempIngredients);
   };
@@ -140,7 +150,7 @@ export default function ShareRecipe() {
 
   const addInstructionStep = () => {
     const tempInstructions = [...instructionSteps];
-    tempInstructions.push({ stepInstruction: '' });
+    tempInstructions.push({ stepInstruction: '', stepTime: 0 });
     console.log(tempInstructions);
     setInstructionSteps(tempInstructions);
   };
@@ -158,7 +168,6 @@ export default function ShareRecipe() {
 
   useEffect(() => {
     isInputValid();
-    console.log(instructionSteps);
   });
 
   return (
@@ -274,6 +283,20 @@ export default function ShareRecipe() {
                     invalid={isEmptyString(instructionSteps[index].stepInstruction)}
                   />
                   <FormFeedback invalid>Dont forget the instructions!</FormFeedback>
+                </FormGroup>
+              </Col>
+              <Col>
+                <Label sm={2}> How long approximately should it take? </Label>
+                <FormGroup>
+                  <Input
+                    type="textarea"
+                    name="stepTime"
+                    id="stepTime"
+                    onChange={(event) => handleInstructionsChange(event, element)}
+                    value={instructionSteps[index].stepTime}
+                    invalid={!isNumber(instructionSteps[index].stepTime)}
+                  />
+                  <FormFeedback invalid>Your input has to be a number!</FormFeedback>
                 </FormGroup>
               </Col>
             </Row>

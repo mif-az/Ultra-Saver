@@ -14,9 +14,9 @@ public class RecipeIngredientModel
 
     public string IngredientName { get; set; } = "";
 
+    public int IngredientAmount { get; set; } = 0;
+
     public string IngredientCookingMethod { get; set; } = "";
 
     public virtual RecipeModel Recipe { get; set; } = null!;
-
-    public virtual IngredientModel Ingredient { get; set; } = null!;
 }

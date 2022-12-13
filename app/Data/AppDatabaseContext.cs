@@ -14,9 +14,6 @@ public class AppDatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<IngredientModel>()
-            .HasKey(a => new { a.Name, a.CookingMethod });
-
         modelBuilder.Entity<UserModel>()
             .HasOne(a => a.Allergens)
             .WithOne(b => b.User)
@@ -49,11 +46,6 @@ public class AppDatabaseContext : DbContext
             .HasOne(ab => ab.Recipe)
             .WithMany(b => b.RecipeIngredient)
             .HasForeignKey(ab => ab.RecipeId);
-
-        modelBuilder.Entity<RecipeIngredientModel>()
-            .HasOne(ab => ab.Ingredient)
-            .WithMany(a => a.RecipeIngredient)
-            .HasForeignKey(ab => new { ab.IngredientName, ab.IngredientCookingMethod });
     }
 
     public DbSet<UserPropsModel> Properties { get; set; } = null!; // UserProps table
@@ -62,8 +54,6 @@ public class AppDatabaseContext : DbContext
     public DbSet<UserModel> User { get; set; } = null!;
 
     public DbSet<OldRecipeModel> Recipe { get; set; } = null!;
-
-    public DbSet<IngredientModel> Ingredient { get; set; } = null!;
 
     public DbSet<ApplianceModel> Appliance { get; set; } = null!;
 
