@@ -13,13 +13,20 @@ public class UserModel
 
     public bool DarkMode { get; set; } = false;
 
-    public float ElectricityPrice { get; set; } = 0;
+    public float ElectricityPrice { get; set; } = 1;
 
-    public float GasPrice { get; set; } = 0;
+    public float GasPrice { get; set; } = 1;
 
     public virtual AllergensModel Allergens { get; set; } = null!;
 
     public virtual ICollection<UserLikedRecipeModel> UserLikedRecipe { get; set; } = null!;
 
     public virtual ICollection<UserOwnedApplianceModel> UserOwnedAppliance { get; set; } = null!;
+}
+
+public class UserPriceDTO
+{
+    public float ElectricityPrice { get; set; } = 1;
+
+    public float GasPrice { get; set; } = 1;
 }

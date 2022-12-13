@@ -6,7 +6,7 @@ import URL from '../appUrl';
 import all from './Texts/all';
 
 export default function AccountSettings() {
-  const [electricityPrice, setElectricityPrice] = useState('');
+  const [price, setPrice] = useState({ electricityPrice: 1, gasPrice: 1 });
   const [lang] = useContext(LanguageContext);
   const [appliances, setAppliances] = useState([{ applianceName: '', applianceWattage: '' }]);
   const [inputValidity, setInputValidity] = useState(true);
@@ -27,8 +27,9 @@ export default function AccountSettings() {
   const isEmptyString = (str) => str.length === 0;
   // const capitalizeFirstLetter = (str) => str.substring(0, 1).toUpperCase() + str.substring(1);
 
+  // eslint-disable-next-line no-unused-vars
   const isInputValid = () => {
-    if (!isNumber(electricityPrice)) {
+    if (!isNumber(price.electricityPrice) && !isNumber(price.gasPrice)) {
       // check if it isn't already false to prevent infinite re-rendering
       if (inputValidity !== false) setInputValidity(false);
       return false;
@@ -48,7 +49,8 @@ export default function AccountSettings() {
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // prevents page refresh
-    await authApi(user).post(`${URL}/userallergens`, preferences);
+    await authApi(user).post(`${URL}/userallergens`, JSON.stringify(preferences));
+    await authApi(user).post(`${URL}/userprice`, JSON.stringify(price));
   };
 
   const handleFormChange = (event, element) => {
@@ -79,6 +81,7 @@ export default function AccountSettings() {
     <FormGroup check inline>
       <Label check>
         <Input
+          checked={preferences[preference]}
           type="checkbox"
           onChange={(event) => handlePreferencesChange(event, preference)}
           value={preferences[preference]}
@@ -87,6 +90,32 @@ export default function AccountSettings() {
       </Label>
     </FormGroup>
   );
+
+  const setPriceHandler = (p) => {
+    setPrice({ electricityPrice: p, gasPrice: p });
+  };
+
+  const getPreferences = async () => {
+    // const data = await authApi(user).get(`${URL}/userallergens`);
+    // const pref = await data.json();
+    const pref = (await authApi(user).get(`${URL}/userallergens`)).json();
+
+    setPreferences({
+      vegetarian: pref.Vegetarian,
+      vegan: pref.Vegan,
+      dairy: pref.DairyAllergy,
+      eggs: pref.EggsAllergy,
+      fish: pref.FishAllergy,
+      shellfish: pref.ShellfishAllergy,
+      nuts: pref.NutsAllergy,
+      wheat: pref.WheatAllergy,
+      soybean: pref.SoybeanAllergy
+    });
+  };
+
+  useEffect(() => {
+    getPreferences();
+  }, []);
 
   useEffect(() => {
     isInputValid();
@@ -101,9 +130,9 @@ export default function AccountSettings() {
           <Input
             name="electricityPrice"
             id="electricityPrice"
-            onChange={(event) => setElectricityPrice(event.target.value)}
-            value={electricityPrice}
-            invalid={!isNumber(electricityPrice)}
+            onChange={(event) => setPriceHandler(event.target.value)}
+            value={price.electricityPrice}
+            invalid={!isNumber(price.electricityPrice)}
           />
           <FormFeedback invalid>Your input has to be a number!</FormFeedback>
         </FormGroup>
