@@ -31,3 +31,20 @@ public class RecipeModel : Model<string>
         return $"{this.Id}_{this.Owner}";
     }
 }
+
+public class RecipeDTO
+{
+    public string Owner { get; set; } = "";
+
+    public string Instruction { get; set; } = "";
+
+    public int CalorieCount { get; set; }
+
+    public int FullPrepTime { get; set; }
+
+    public string Name { get; set; } = null!;
+
+    public byte[] ImageData { get; set; } = null!;
+
+    public ICollection<RecipeIngredientDTO> RecipeIngredient { get; set; } = null!;
+}

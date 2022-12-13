@@ -34,7 +34,10 @@ export default function ShareRecipe() {
   const [lang] = useContext(LanguageContext);
 
   const isNumber = (input) => !Number.isNaN(+input); // isNaN returns true if the input is NOT a number, so we have to negate
-  const isEmptyString = (str) => str.length === 0;
+  const isEmptyString = (str) => {
+    console.log(str);
+    return str.length === 0;
+  };
 
   const isInputValid = () => {
     if (isEmptyString(recipeTitle)) {
@@ -44,7 +47,6 @@ export default function ShareRecipe() {
     }
 
     if (isEmptyString(description)) {
-      // check if it isn't already false to prevent infinite re-rendering
       if (inputValidity !== false) setInputValidity(false);
       return false;
     }
@@ -54,7 +56,7 @@ export default function ShareRecipe() {
       if (
         !isNumber(ingredient.ingredientAmount) ||
         isEmptyString(ingredient.ingredientName) ||
-        isEmptyString(ingredient.ingredientPreparation)
+        isEmptyString(ingredient.ingredientPreparationMethod)
       ) {
         if (inputValidity !== false) setInputValidity(false);
         return false;
@@ -97,7 +99,9 @@ export default function ShareRecipe() {
       recipeIngredient: [],
       userLikedRecipe: []
     };
+
     console.log(JSON.stringify(recipeModel));
+    console.log(JSON.stringify(ingredients));
     await authApi(user).post(`${URL}/recipe`, JSON.stringify(recipeModel));
   };
 
@@ -168,6 +172,9 @@ export default function ShareRecipe() {
 
   useEffect(() => {
     isInputValid();
+    console.log(ingredients);
+    console.log(recipeTitle);
+    console.log(description);
   });
 
   return (
@@ -177,8 +184,8 @@ export default function ShareRecipe() {
         <FormGroup>
           <Label> {all.share_recipe_label_name[lang]} </Label>
           <Input
-            name="recipeName"
-            id="recipeName"
+            name="recipeTitle"
+            id="recipeTitle"
             onChange={(event) => setRecipeTitle(event.target.value)}
             value={recipeTitle}
             invalid={isEmptyString(recipeTitle)}
