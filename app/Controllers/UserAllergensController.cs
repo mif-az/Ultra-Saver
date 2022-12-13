@@ -39,7 +39,7 @@ public class UserAllergensController : ControllerBase
                 WheatAllergy = allergens.Wheat,
                 SoybeanAllergy = allergens.Soybean
             };
-            _db.Allergens.Add(AllergensModel);
+            _db.Allergens.Update(AllergensModel);
             _db.SaveChanges();
 
             return Ok();
