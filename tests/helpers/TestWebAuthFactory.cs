@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using Bogus;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +11,8 @@ namespace Ultra_Saver.Tests;
 public class TestWebAuthFactory<TProgram>
     : WebApplicationFactory<TProgram> where TProgram : class
 {
+
+    internal String dbName { get; set; } = "defaultDBName";
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -22,8 +26,9 @@ public class TestWebAuthFactory<TProgram>
 
             services.AddDbContext<AppDatabaseContext>(options =>
             {
-                options.UseInMemoryDatabase("InMemoryDbForTesting");
+                options.UseInMemoryDatabase(dbName);
             });
+
         });
 
         builder.UseEnvironment("Development");
