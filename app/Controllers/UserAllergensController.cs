@@ -27,7 +27,7 @@ public class UserAllergensController : ControllerBase
         string? userEmail = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim();
         var user = _db.User.Find(userEmail);
 
-        if (userEmail != null)
+        if (userEmail != null && user != null)
         {
             var userAllergens = _db.Allergens.Find(userEmail);
             if (userAllergens == null)
