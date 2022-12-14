@@ -27,7 +27,7 @@ export default function Recipe() {
       response = await authApi(user).get(`${URL}/recipeingredient/${recipeId}`);
       data = await response.json();
       console.log(data);
-      setRecipeIngredients(data);
+      if (data.status !== 404) setRecipeIngredients(data);
     };
     initialFetchData();
   }, []);
