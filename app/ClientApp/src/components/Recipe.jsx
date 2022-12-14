@@ -7,18 +7,27 @@ export default function Recipe() {
   const { recipeId } = useParams();
   const [user] = useContext(UserContext);
   const [recipe, setRecipe] = useState('');
+  const [recipeIngredients, setRecipeIngredients] = useState([]);
 
   function Instructions() {
-    const text = recipe.instruction;
-    return text.split('\n').map((str) => <p className="fs-5">{str}</p>);
+    if (recipe.instruction !== undefined) {
+      const text = recipe.instruction;
+      return text.split('\n').map((str) => <p className="fs-5">{str}</p>);
+    }
+    return '';
   }
 
   useEffect(() => {
     const initialFetchData = async () => {
-      const response = await authApi(user).get(`${URL}/recipe/${recipeId}`);
-      const data = await response.json();
+      let response = await authApi(user).get(`${URL}/recipe/${recipeId}`);
+      let data = await response.json();
       console.log(data);
       setRecipe(data);
+
+      response = await authApi(user).get(`${URL}/recipeingredient/${recipeId}`);
+      data = await response.json();
+      console.log(data);
+      setRecipeIngredients(data);
     };
     initialFetchData();
   }, []);
@@ -43,6 +52,17 @@ export default function Recipe() {
           />
         </div>
       </div>
+      <ul>
+        {recipeIngredients.map((el) => (
+          <li>
+            <div className="row fs-4" key={el.id}>
+              <p>
+                {el.ingredientAmount} of {el.ingredientName}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
       <Instructions />
     </div>
   );

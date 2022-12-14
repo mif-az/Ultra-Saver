@@ -24,30 +24,20 @@ public class RecipeIngredientController : ControllerBase
     }
 
     [HttpGet("{recipeID}")]
-    public async Task<IActionResult> GetRecipeFromID(int recipeID)
+    public async Task<IActionResult> GetRecipeIngredientsFromRecipeID(int recipeID)
     {
-        RecipeModel? recipe = _db.Recipes.Find(recipeID);
+        IQueryable<RecipeIngredientModel> recipeIngredients = (from r in _db.RecipeIngredient
+                                                               where r.RecipeId == recipeID
+                                                               select r);
 
-        if (recipe != null)
+        if (recipeIngredients.Any())
         {
-            return Ok(_db.Recipes.Find(recipeID));
+            return Ok(recipeIngredients);
         }
         else
         {
             return StatusCode(404);
         }
 
-    }
-
-    [HttpPost]
-    [Authorize]
-    public IActionResult PostRecipeIngredients(ICollection<RecipeIngredientModel> ingredients) //For upserting we need the full model information (id can be ommited for creating a new recipe)
-    {
-        foreach (var recipe in ingredients)
-        {
-            recipe.RecipeId++;
-        }
-
-        return Ok();
     }
 }
