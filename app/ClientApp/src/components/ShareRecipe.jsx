@@ -10,7 +10,6 @@ import {
   Col,
   FormText
 } from 'reactstrap';
-import URL from '../appUrl';
 import { LanguageContext } from '../contexts/LanguageProvider';
 
 import { authApi, UserContext } from '../contexts/UserProvider';
@@ -76,10 +75,10 @@ export default function ShareRecipe() {
       fullPrepTime: 1000,
       imageData,
       recipeIngredient: [],
-      userLikedRecipe: []
+      userlikedrecipe: []
     };
     console.log(JSON.stringify(recipeModel));
-    await authApi(user).post(`${URL}/recipe`, JSON.stringify(recipeModel));
+    await authApi(user).post(`/recipe`, JSON.stringify(recipeModel));
   };
 
   const handleFormChange = (event, element) => {

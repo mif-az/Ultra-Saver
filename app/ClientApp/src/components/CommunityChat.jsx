@@ -4,7 +4,6 @@
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import { React, useContext, useEffect, useState } from 'react';
 import { authApi, UserContext } from '../contexts/UserProvider';
-import URL from '../appUrl';
 import { LanguageContext } from '../contexts/LanguageProvider';
 import all from './Texts/all';
 
@@ -20,7 +19,7 @@ export default function ChatExample() {
 
   useEffect(() => {
     const fn = async () => {
-      const msgs = await authApi(user).get(`${URL}/chat/messages`);
+      const msgs = await authApi(user).get(`/chat/messages`);
       setMessages(await msgs.json());
     };
 
@@ -28,7 +27,7 @@ export default function ChatExample() {
       if (connection !== null) return;
       try {
         const conn = new HubConnectionBuilder()
-          .withUrl(`${URL}/chat/send`, { accessTokenFactory: () => user.jwt })
+          .withUrl(`/chat/send`, { accessTokenFactory: () => user.jwt })
           .configureLogging(LogLevel.Information)
           .build();
 

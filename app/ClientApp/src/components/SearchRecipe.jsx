@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Button, Input, Label } from 'reactstrap';
 import { authApi, UserContext } from '../contexts/UserProvider';
-import URL from '../appUrl';
 import all from './Texts/all';
 import { LanguageContext } from '../contexts/LanguageProvider';
 
@@ -33,7 +32,7 @@ export default function SearchRecipe({ request, likedRecipes }) {
   ];
 
   async function fetchData(q) {
-    const response = await authApi(user).get(`${URL}/${request}?filter=${q}`);
+    const response = await authApi(user).get(`/${request}?filter=${q}`);
     const data = await response.json();
     console.log(data);
     return data;
@@ -87,9 +86,9 @@ export default function SearchRecipe({ request, likedRecipes }) {
     };
 
     if (likedRecipes) {
-      await authApi(user).delete(`${URL}/userLikedRecipe`, JSON.stringify(likedRecipeModel));
+      await authApi(user).delete(`/userlikedrecipe`, JSON.stringify(likedRecipeModel));
       await handleSearchChange(query);
-    } else await authApi(user).post(`${URL}/userLikedRecipe`, JSON.stringify(likedRecipeModel));
+    } else await authApi(user).post(`/userlikedrecipe`, JSON.stringify(likedRecipeModel));
   };
 
   // Call fetch data on first render to not have an empty list on start

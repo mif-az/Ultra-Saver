@@ -69,6 +69,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -78,9 +79,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "UltraSaver Docs v1"));
 
 }
+else
+{
+    app.UseHsts();
+}
+
 
 app.UseHttpsRedirection();
-// app.UseStaticFiles();
+
+app.UseStaticFiles();
 
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://usaver.ddns.net:2781", "https://localhost:44462"));
 
