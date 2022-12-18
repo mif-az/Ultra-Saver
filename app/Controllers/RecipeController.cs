@@ -82,6 +82,7 @@ public class RecipeController : ControllerBase
     {
         RecipeModel recipe = new RecipeModel
         {
+            Id = postRequest.Id,
             Owner = postRequest.Owner,
             Instruction = postRequest.Instruction,
             CalorieCount = postRequest.CalorieCount,

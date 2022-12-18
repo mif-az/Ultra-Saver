@@ -30,14 +30,14 @@ public class UserInfoController : ControllerBase
         if (email == null)
             return BadRequest("No email was provided");
 
-        var res = this._db.Properties.Find(email); // Try to find users properties here
+        var res = this._db.User.Find(email); // Try to find users properties here
 
         if (res == null)
         {
             // If this user logged in for the first time - we call a service that initializes a new user in the database
             _logger.LogInformation("A new user has registered.");
             _newUserInitService.Init(db: _db, email: email);
-            res = this._db.Properties.Find(email);
+            res = this._db.User.Find(email);
         }
 
         return Ok(res);
@@ -53,27 +53,19 @@ public class UserInfoController : ControllerBase
         if (email == null)
             return BadRequest("Not logged in");
 
-        UserModel userModel = new UserModel
+        var curr = _db.User.Find(email);
+
+        if (curr == null)
         {
-            Email = email,
-            ElectricityPrice = postRequest.ElectricityPrice,
-            DarkMode = postRequest.DarkMode
-        };
-
-
-
-        if (user == null)
-        {
-            _db.User.Add(userModel);
-            _db.SaveChanges();
+            return BadRequest("User does not exist");
         }
-        else
-        {
-            user.ElectricityPrice = userModel.ElectricityPrice;
-            user.DarkMode = userModel.DarkMode;
-            _db.User.Update(user);
-            _db.SaveChanges();
-        }
+
+        curr.ElectricityPrice = postRequest.ElectricityPrice;
+        curr.DarkMode = postRequest.DarkMode;
+
+        _db.Update(curr);
+        _db.SaveChanges();
+
 
         return Ok();
     }

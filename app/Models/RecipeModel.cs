@@ -34,6 +34,7 @@ public class RecipeModel : Model<string>
 
 public class RecipeDTO
 {
+    public int Id { get; set; } = 0;
     public string Owner { get; set; } = "";
 
     public string Instruction { get; set; } = "";
