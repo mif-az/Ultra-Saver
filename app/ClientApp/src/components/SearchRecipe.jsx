@@ -11,6 +11,7 @@ export default function SearchRecipe({ request, likedRecipes }) {
   const [recipes, setRecipes] = useState([]);
   const [query, setQuery] = useState('');
   const [sortOption, setSortOption] = useState();
+  const [energyPrice, setEnergyPrice] = useState(1);
   const [filterOptions, setFilterOptions] = useState({
     wattage: '',
     fullPrepTime: ''
@@ -92,6 +93,11 @@ export default function SearchRecipe({ request, likedRecipes }) {
     } else await authApi(user).post(`${URL}/userLikedRecipe`, JSON.stringify(likedRecipeModel));
   };
 
+  const getEnergyPrice = async () => {
+    const u = await (await authApi(user).get(`${URL}/userprice`)).json();
+    setEnergyPrice(u.electricityPrice);
+  };
+
   // Call fetch data on first render to not have an empty list on start
   useEffect(() => {
     const initialFetchData = async () => {
@@ -101,6 +107,10 @@ export default function SearchRecipe({ request, likedRecipes }) {
     };
     initialFetchData();
   }, [request, likedRecipes]); // second argument makes useEffect call fetchData() only on first render
+
+  useEffect(() => {
+    getEnergyPrice();
+  }, []);
 
   const likeButton = (el) => {
     if (likedRecipes) {
@@ -174,7 +184,7 @@ export default function SearchRecipe({ request, likedRecipes }) {
               </div>
               <div className="col">
                 <p>Estimated price:</p>
-                <p>{el.wattage}$</p>
+                <p>{el.totalEnergy * energyPrice}$</p>
               </div>
               <div className="col">
                 <img

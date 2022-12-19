@@ -12,6 +12,14 @@ public class UserPriceController : ControllerBase
     private readonly AppDatabaseContext _db;
     public UserPriceController(AppDatabaseContext db) {  _db = db; }
 
+    [HttpGet]
+    [Authorize]
+    public IActionResult GetPrice() {
+        string? userEmail = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim();
+
+        return Ok(_db.User.Find(userEmail));
+    }
+
     [HttpPost]
     [Authorize]
     public IActionResult SetPrice(UserPriceDTO price) //For upserting we need the full model information (id can be ommited for creating a new recipe)
