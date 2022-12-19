@@ -10,6 +10,7 @@ export default function SearchRecipe({ request, likedRecipes }) {
   const [lang] = useContext(LanguageContext);
   const [recipes, setRecipes] = useState([]);
   const [query, setQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [sortOption, setSortOption] = useState();
   const [filterOptions, setFilterOptions] = useState({
     wattage: '',
@@ -32,8 +33,8 @@ export default function SearchRecipe({ request, likedRecipes }) {
     }
   ];
 
-  async function fetchData(q) {
-    const response = await authApi(user).get(`${URL}/${request}?filter=${q}`);
+  async function fetchData(q, page = currentPage) {
+    const response = await authApi(user).get(`${URL}/${request}?page=${page}&filter=${q}`);
     const data = await response.json();
     console.log(data);
     return data;
@@ -66,6 +67,12 @@ export default function SearchRecipe({ request, likedRecipes }) {
     setQuery(q);
     updateAndSetRecipes(data, sortOption, filterOptions);
   }
+
+  const handlePagination = async (increment) => {
+    const data = await fetchData(query, currentPage + increment);
+    setCurrentPage(currentPage + increment);
+    updateAndSetRecipes(data, sortOption, filterOptions);
+  };
 
   async function handleSortChange(q) {
     await setSortOption(q);
@@ -187,6 +194,16 @@ export default function SearchRecipe({ request, likedRecipes }) {
             <div className="row">{likeButton(el)}</div>
           </div>
         ))}
+        <div className="d-flex justify-content-center">
+          <div className="btn-group">
+            <Button className="btn" onClick={() => handlePagination(-1)}>
+              Previous
+            </Button>
+            <Button className="btn" onClick={() => handlePagination(+1)}>
+              Next
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
