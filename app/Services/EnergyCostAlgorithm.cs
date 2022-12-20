@@ -13,7 +13,6 @@ public interface IEnergyCostAlgorithm
 
 public class EnergyCostAlgorithm : IEnergyCostAlgorithm
 {
-    public EnergyCostAlgorithm() { }
     public double TotalEnergy { get; set; } = 0;
     public float GasVolumeUsed { get; set; } = 0;
 
@@ -59,5 +58,10 @@ public class EnergyCostAlgorithm : IEnergyCostAlgorithm
     {
         //               hours * kilo
         return Value / 3_600_000;
+    }
+
+    void IEnergyCostAlgorithm.ElectricPower(int AppliancePower, float PowerScale, int Time, ApplianceType Type)
+    {
+        throw new NotImplementedException();
     }
 }

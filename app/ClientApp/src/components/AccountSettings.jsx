@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Button, Form, FormGroup, FormFeedback, Input, Label, Row, Col } from 'reactstrap';
 import { LanguageContext } from '../contexts/LanguageProvider';
+import { authApi, UserContext } from '../contexts/UserProvider';
+import URL from '../appUrl';
 import all from './Texts/all';
 
 export default function AccountSettings() {
-  const [electricityPrice, setElectricityPrice] = useState('');
+  const [user] = useContext(UserContext);
   const [lang] = useContext(LanguageContext);
+
+  const [price, setPrice] = useState({ electricityPrice: 1, gasPrice: 1 });
+  const [isDarkMode, setDarkMode] = useState(false);
   const [appliances, setAppliances] = useState([{ applianceName: '', applianceWattage: '' }]);
   const [inputValidity, setInputValidity] = useState(true);
   const [preferences, setPreferences] = useState({
@@ -24,8 +29,9 @@ export default function AccountSettings() {
   const isEmptyString = (str) => str.length === 0;
   // const capitalizeFirstLetter = (str) => str.substring(0, 1).toUpperCase() + str.substring(1);
 
+  // eslint-disable-next-line no-unused-vars
   const isInputValid = () => {
-    if (!isNumber(electricityPrice)) {
+    if (!isNumber(price.electricityPrice) && !isNumber(price.gasPrice)) {
       // check if it isn't already false to prevent infinite re-rendering
       if (inputValidity !== false) setInputValidity(false);
       return false;
@@ -43,9 +49,9 @@ export default function AccountSettings() {
     return true;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault(); // prevents page refresh
-    console.log(electricityPrice);
+    console.log(price);
     console.log(JSON.stringify(appliances));
     console.log(JSON.stringify(preferences));
   };
@@ -78,6 +84,7 @@ export default function AccountSettings() {
     <FormGroup check inline>
       <Label check>
         <Input
+          checked={preferences[preference]}
           type="checkbox"
           onChange={(event) => handlePreferencesChange(event, preference)}
           value={preferences[preference]}
@@ -86,6 +93,36 @@ export default function AccountSettings() {
       </Label>
     </FormGroup>
   );
+
+  const setPriceHandler = (p) => {
+    setPrice({ electricityPrice: p, gasPrice: p });
+  };
+
+  const getPreferences = async () => {
+    const pref = await (await authApi(user).get(`${URL}/userallergens`)).json();
+
+    setPreferences({
+      vegetarian: pref.Vegetarian,
+      vegan: pref.Vegan,
+      dairy: pref.DairyAllergy,
+      eggs: pref.EggsAllergy,
+      fish: pref.FishAllergy,
+      shellfish: pref.ShellfishAllergy,
+      nuts: pref.NutsAllergy,
+      wheat: pref.WheatAllergy,
+      soybean: pref.SoybeanAllergy
+    });
+  };
+
+  const getEnergyPrice = async () => {
+    const cost = await (await authApi(user).get(`${URL}/userprice`)).json();
+    setPrice(cost.electricityPrice);
+  };
+
+  useEffect(() => {
+    getPreferences();
+    getEnergyPrice();
+  }, []);
 
   useEffect(() => {
     isInputValid();
@@ -100,9 +137,9 @@ export default function AccountSettings() {
           <Input
             name="electricityPrice"
             id="electricityPrice"
-            onChange={(event) => setElectricityPrice(event.target.value)}
-            value={electricityPrice}
-            invalid={!isNumber(electricityPrice)}
+            onChange={(event) => setPriceHandler(event.target.value)}
+            value={price.electricityPrice}
+            invalid={!isNumber(price.electricityPrice)}
           />
           <FormFeedback invalid>Your input has to be a number!</FormFeedback>
         </FormGroup>
@@ -158,6 +195,18 @@ export default function AccountSettings() {
         <Button type="button" color="primary" onClick={addAppliance}>
           +
         </Button>
+        <div className="row">
+          <FormGroup check inline>
+            <Label check>
+              <Input
+                type="checkbox"
+                onChange={(event) => setDarkMode(event.target.checked)}
+                value={isDarkMode}
+              />
+              Dark Mode
+            </Label>
+          </FormGroup>
+        </div>
         <div className="row">
           {Object.keys(preferences).map((preference) => generatePreferenceCheckbox(preference))}
         </div>

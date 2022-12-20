@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Button, Input, Label } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import { authApi, UserContext } from '../contexts/UserProvider';
 import URL from '../appUrl';
 import all from './Texts/all';
@@ -11,6 +12,7 @@ export default function SearchRecipe({ request, likedRecipes }) {
   const [recipes, setRecipes] = useState([]);
   const [query, setQuery] = useState('');
   const [sortOption, setSortOption] = useState();
+  const [energyPrice, setEnergyPrice] = useState(1);
   const [filterOptions, setFilterOptions] = useState({
     wattage: '',
     fullPrepTime: ''
@@ -87,6 +89,11 @@ export default function SearchRecipe({ request, likedRecipes }) {
     } else await authApi(user).post(`${URL}/userLikedRecipe?recipeId=${recipe.id}`);
   };
 
+  const getEnergyPrice = async () => {
+    const u = await (await authApi(user).get(`${URL}/userprice`)).json();
+    setEnergyPrice(u.electricityPrice);
+  };
+
   // Call fetch data on first render to not have an empty list on start
   useEffect(() => {
     const initialFetchData = async () => {
@@ -95,7 +102,11 @@ export default function SearchRecipe({ request, likedRecipes }) {
       setRecipes(data);
     };
     initialFetchData();
-  }, [request, likedRecipes]); // second argument makes useEffect call fetchData() only on first render
+  }, [request, likedRecipes]);
+
+  useEffect(() => {
+    getEnergyPrice();
+  }, []);
 
   const likeButton = (el) => {
     if (likedRecipes) {
@@ -163,13 +174,15 @@ export default function SearchRecipe({ request, likedRecipes }) {
           <div>
             <div className="row border-2 mt-1 bg-dark text-white rounded-1 p-2" key={el.id}>
               <div className="col-6">
-                <div className="fw-bold">{el.name}</div>
+                <Link to={`/r/${el.id}`}>
+                  <div className="fw-bold">{el.name}</div>
+                </Link>
                 <p>~{el.fullPrepTime} minutes to make</p>
                 <p>Short description here (which we dont have)</p>
               </div>
               <div className="col">
                 <p>Estimated price:</p>
-                <p>{el.wattage}$</p>
+                <p>{el.totalEnergy * energyPrice}$</p>
               </div>
               <div className="col">
                 <img
