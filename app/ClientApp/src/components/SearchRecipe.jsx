@@ -69,8 +69,12 @@ export default function SearchRecipe({ request, likedRecipes }) {
   }
 
   const handlePagination = async (increment) => {
-    const data = await fetchData(query, currentPage + increment);
-    setCurrentPage(currentPage + increment);
+    let newPage = currentPage + increment;
+    if (newPage <= 0) newPage = 1;
+
+    const data = await fetchData(query, newPage);
+    if (data.length === 0) return;
+    setCurrentPage(newPage);
     updateAndSetRecipes(data, sortOption, filterOptions);
   };
 
