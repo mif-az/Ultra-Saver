@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Button, Form, FormGroup, FormFeedback, Input, Label, Row, Col } from 'reactstrap';
 import { LanguageContext } from '../contexts/LanguageProvider';
+import { authApi, UserContext } from '../contexts/UserProvider';
+import URL from '../appUrl';
 import all from './Texts/all';
 
 export default function AccountSettings() {
-  const [electricityPrice, setElectricityPrice] = useState('');
+  const [user] = useContext(UserContext);
   const [lang] = useContext(LanguageContext);
+
+  const [electricityPrice, setElectricityPrice] = useState('');
+  const [isDarkMode, setDarkMode] = useState(false);
   const [appliances, setAppliances] = useState([{ applianceName: '', applianceWattage: '' }]);
   const [inputValidity, setInputValidity] = useState(true);
   const [preferences, setPreferences] = useState({
@@ -43,11 +48,18 @@ export default function AccountSettings() {
     return true;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault(); // prevents page refresh
     console.log(electricityPrice);
     console.log(JSON.stringify(appliances));
     console.log(JSON.stringify(preferences));
+
+    const userModel = {
+      electricityPrice,
+      darkMode: isDarkMode
+    };
+
+    await authApi(user).post(`${URL}/userinfo`, JSON.stringify(userModel));
   };
 
   const handleFormChange = (event, element) => {
@@ -158,6 +170,18 @@ export default function AccountSettings() {
         <Button type="button" color="primary" onClick={addAppliance}>
           +
         </Button>
+        <div className="row">
+          <FormGroup check inline>
+            <Label check>
+              <Input
+                type="checkbox"
+                onChange={(event) => setDarkMode(event.target.checked)}
+                value={isDarkMode}
+              />
+              Dark Mode
+            </Label>
+          </FormGroup>
+        </div>
         <div className="row">
           {Object.keys(preferences).map((preference) => generatePreferenceCheckbox(preference))}
         </div>

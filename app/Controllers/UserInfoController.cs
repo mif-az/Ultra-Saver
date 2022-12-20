@@ -30,14 +30,14 @@ public class UserInfoController : ControllerBase
         if (email == null)
             return BadRequest("No email was provided");
 
-        var res = this._db.Properties.Find(email); // Try to find users properties here
+        var res = this._db.User.Find(email); // Try to find users properties here
 
         if (res == null)
         {
             // If this user logged in for the first time - we call a service that initializes a new user in the database
             _logger.LogInformation("A new user has registered.");
-            _newUserInitService.init(db: _db, email: email);
-            res = this._db.Properties.Find(email);
+            _newUserInitService.Init(db: _db, email: email);
+            res = this._db.User.Find(email);
         }
 
         return Ok(res);
@@ -45,19 +45,29 @@ public class UserInfoController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public IActionResult setUserInfo(UserPropsModel props)
+    public IActionResult SetUserInfo(UserDTO postRequest)
     {
         var email = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim(); // Get email from the JWT
+        UserModel? user = _db.User.Find(email);
 
         if (email == null)
-            return BadRequest("No email was provided");
+            return BadRequest("Not logged in");
 
-        if (!email.Equals(props.email))
-            return BadRequest("Incorrect identity");
+        var curr = _db.User.Find(email);
 
-        _db.Properties.Update(props);
+        if (curr == null)
+        {
+            return BadRequest("User does not exist");
+        }
 
-        return Ok(_db.SaveChanges());
+        curr.ElectricityPrice = postRequest.ElectricityPrice;
+        curr.DarkMode = postRequest.DarkMode;
+
+        _db.Update(curr);
+        _db.SaveChanges();
+
+
+        return Ok();
     }
 }
 

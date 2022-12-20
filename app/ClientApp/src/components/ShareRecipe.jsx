@@ -23,18 +23,21 @@ export default function ShareRecipe() {
     {
       ingredientName: '',
       ingredientAmount: '',
-      ingredientPreparationMethod: 'None of the above',
-      ingredientPreparation: ''
+      ingredientPreparationMethod: 'None of the above'
     }
   ]);
-  const [instructions, setInstructions] = useState('');
+  const [instructionSteps, setInstructionSteps] = useState([{ stepInstruction: '', stepTime: 0 }]);
+
   const [inputValidity, setInputValidity] = useState(true);
   const [imageData, setImageData] = useState();
   const [user] = useContext(UserContext);
   const [lang] = useContext(LanguageContext);
 
   const isNumber = (input) => !Number.isNaN(+input); // isNaN returns true if the input is NOT a number, so we have to negate
-  const isEmptyString = (str) => str.length === 0;
+  const isEmptyString = (str) => {
+    console.log(str);
+    return str.length === 0;
+  };
 
   const isInputValid = () => {
     if (isEmptyString(recipeTitle)) {
@@ -44,7 +47,6 @@ export default function ShareRecipe() {
     }
 
     if (isEmptyString(description)) {
-      // check if it isn't already false to prevent infinite re-rendering
       if (inputValidity !== false) setInputValidity(false);
       return false;
     }
@@ -54,7 +56,7 @@ export default function ShareRecipe() {
       if (
         !isNumber(ingredient.ingredientAmount) ||
         isEmptyString(ingredient.ingredientName) ||
-        isEmptyString(ingredient.ingredientPreparation)
+        isEmptyString(ingredient.ingredientPreparationMethod)
       ) {
         if (inputValidity !== false) setInputValidity(false);
         return false;
@@ -65,28 +67,56 @@ export default function ShareRecipe() {
     return true;
   };
 
+  const stringifyInstructionSteps = () => {
+    let instructions = '';
+
+    for (let i = 0; i < instructionSteps.length; i += 1) {
+      instructions = instructions.concat(`${i + 1}. ${instructionSteps[i].stepInstruction}\n`);
+    }
+    return instructions;
+  };
+
+  const calculatePrepTime = () => {
+    let fullPrepTime = 0;
+
+    for (let i = 0; i < instructionSteps.length; i += 1) {
+      fullPrepTime += instructionSteps[i].stepTime;
+    }
+
+    return fullPrepTime;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault(); // prevents page refresh
 
     const recipeModel = {
       owner: user.email,
-      instruction: instructions,
+      instruction: stringifyInstructionSteps(),
       name: recipeTitle,
       calorieCount: 1000, // Calories and full preptime will later be calculated from all the ingredients
-      fullPrepTime: 1000,
+      fullPrepTime: calculatePrepTime(),
       imageData,
       recipeIngredient: [],
       userLikedRecipe: []
     };
+
     console.log(JSON.stringify(recipeModel));
+    console.log(JSON.stringify(ingredients));
     await authApi(user).post(`${URL}/recipe`, JSON.stringify(recipeModel));
   };
 
-  const handleFormChange = (event, element) => {
+  const handleIngredientsChange = (event, element) => {
     const index = ingredients.indexOf(element);
     const tempIngredients = [...ingredients];
     tempIngredients[index][event.target.name] = event.target.value;
     setIngredients(tempIngredients);
+  };
+
+  const handleInstructionsChange = (event, element) => {
+    const index = instructionSteps.indexOf(element);
+    const tempInstructions = [...instructionSteps];
+    tempInstructions[index][event.target.name] = event.target.value;
+    setInstructionSteps(tempInstructions);
   };
 
   const handleReaderLoaded = (e) => {
@@ -110,8 +140,7 @@ export default function ShareRecipe() {
     tempIngredients.push({
       ingredientName: '',
       ingredientAmount: '',
-      ingredientPreparationMethod: 'None of the above',
-      ingredientPreparation: ''
+      ingredientPreparationMethod: 'None of the above'
     });
     setIngredients(tempIngredients);
   };
@@ -123,9 +152,29 @@ export default function ShareRecipe() {
     setIngredients(tempIngredients);
   };
 
+  const addInstructionStep = () => {
+    const tempInstructions = [...instructionSteps];
+    tempInstructions.push({ stepInstruction: '', stepTime: 0 });
+    console.log(tempInstructions);
+    setInstructionSteps(tempInstructions);
+  };
+
+  const removeInstructionStep = (index) => {
+    let tempInstructions = [...instructionSteps];
+    console.log(tempInstructions, index);
+    tempInstructions = tempInstructions.filter(
+      (element) => instructionSteps.indexOf(element) !== index
+    );
+    console.log(tempInstructions);
+    setInstructionSteps(tempInstructions);
+    console.log(instructionSteps);
+  };
+
   useEffect(() => {
     isInputValid();
     console.log(ingredients);
+    console.log(recipeTitle);
+    console.log(description);
   });
 
   return (
@@ -135,8 +184,8 @@ export default function ShareRecipe() {
         <FormGroup>
           <Label> {all.share_recipe_label_name[lang]} </Label>
           <Input
-            name="recipeName"
-            id="recipeName"
+            name="recipeTitle"
+            id="recipeTitle"
             onChange={(event) => setRecipeTitle(event.target.value)}
             value={recipeTitle}
             invalid={isEmptyString(recipeTitle)}
@@ -168,13 +217,12 @@ export default function ShareRecipe() {
                     type="textarea"
                     name="ingredientName"
                     id="exampleText"
-                    onChange={(event) => handleFormChange(event, element)}
+                    onChange={(event) => handleIngredientsChange(event, element)}
                     value={ingredients[index].ingredientName}
                     invalid={isEmptyString(ingredients[index].ingredientName)}
                   />
                   <FormFeedback invalid>
-                    {' '}
-                    {all.share_recipe_validation_ingredient_name[lang]}{' '}
+                    {all.share_recipe_validation_ingredient_name[lang]}
                   </FormFeedback>
                 </FormGroup>
               </Col>
@@ -185,7 +233,7 @@ export default function ShareRecipe() {
                     type="textarea"
                     name="ingredientAmount"
                     id="exampleText"
-                    onChange={(event) => handleFormChange(event, element)}
+                    onChange={(event) => handleIngredientsChange(event, element)}
                     value={ingredients[index].ingredientAmount}
                     invalid={!isNumber(ingredients[index].ingredientAmount)}
                   />
@@ -198,7 +246,7 @@ export default function ShareRecipe() {
                   <Input
                     type="select"
                     name="ingredientPreparationMethod"
-                    onChange={(event) => handleFormChange(event, element)}
+                    onChange={(event) => handleIngredientsChange(event, element)}
                     value={ingredients[index].ingredientPreparationMethod}>
                     <option>Boiled</option>
                     <option>Baked in oven</option>
@@ -210,23 +258,10 @@ export default function ShareRecipe() {
               </Col>
             </Row>
             <Row>
-              <Label sm={2}> {all.share_recipe_label_explanation[lang]} </Label>
-              <FormGroup>
-                <Input
-                  type="textarea"
-                  name="ingredientPreparation"
-                  onChange={(event) => handleFormChange(event, element)}
-                  value={ingredients[index].ingredientPreparation}
-                  invalid={isEmptyString(ingredients[index].ingredientPreparation)}
-                />
-                <FormFeedback invalid>{all.share_recipe_validation_explanation[lang]}</FormFeedback>
-              </FormGroup>
               {ingredients.length > 1 && (
                 <div>
-                  <Button
-                    color="danger"
-                    size="sm"
-                    onClick={() => removeIngredient(ingredients.indexOf(element))}>
+                  <Button color="danger" size="sm" onClick={() => removeIngredient(index)}>
+                    {/* changed from indexOf to just index */}
                     Remove
                   </Button>{' '}
                 </div>
@@ -235,20 +270,57 @@ export default function ShareRecipe() {
           </div>
         ))}
         <Button type="button" color="primary" onClick={addIngredient}>
-          +
-        </Button>{' '}
-        <FormGroup>
-          <Label sm={2}> {all.share_recipe_label_intr[lang]} </Label>
-          <Input
-            type="textarea"
-            name="text"
-            id="exampleText"
-            onChange={(event) => setInstructions(event.target.value)}
-            value={instructions}
-            invalid={isEmptyString(instructions)}
-          />
-          <FormFeedback invalid> {all.share_recipe_validation_intr[lang]} </FormFeedback>
-        </FormGroup>
+          Add Ingredient
+        </Button>
+        <div className="fw-bold fs-1"> Instructions </div>
+        {instructionSteps.map((element, index) => (
+          // change later from index to some sort of ID system
+          // eslint-disable-next-line react/no-array-index-key
+          <div className="form-row mb-4" key={index}>
+            <Row>
+              <Col>
+                <Label sm={2}> Step {index + 1} </Label>
+                <FormGroup>
+                  <Input
+                    type="textarea"
+                    name="stepInstruction"
+                    id="instructionStep"
+                    onChange={(event) => handleInstructionsChange(event, element)}
+                    value={instructionSteps[index].stepInstruction}
+                    invalid={isEmptyString(instructionSteps[index].stepInstruction)}
+                  />
+                  <FormFeedback invalid>Dont forget the instructions!</FormFeedback>
+                </FormGroup>
+              </Col>
+              <Col>
+                <Label sm={2}> How long approximately should it take? </Label>
+                <FormGroup>
+                  <Input
+                    type="textarea"
+                    name="stepTime"
+                    id="stepTime"
+                    onChange={(event) => handleInstructionsChange(event, element)}
+                    value={instructionSteps[index].stepTime}
+                    invalid={!isNumber(instructionSteps[index].stepTime)}
+                  />
+                  <FormFeedback invalid>Your input has to be a number!</FormFeedback>
+                </FormGroup>
+              </Col>
+            </Row>
+            <Row>
+              {instructionSteps.length > 1 && (
+                <div>
+                  <Button color="danger" size="sm" onClick={() => removeInstructionStep(index)}>
+                    Remove
+                  </Button>
+                </div>
+              )}
+            </Row>
+          </div>
+        ))}
+        <Button type="button" color="primary" onClick={addInstructionStep}>
+          Add more instructions
+        </Button>
         <FormGroup>
           <Label> {all.share_recipe_label_picture[lang]} </Label>
           <Input type="file" name="file" onChange={(event) => handlePictureUpload(event)} />
