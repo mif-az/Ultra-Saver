@@ -6,11 +6,13 @@ import URL from '../appUrl';
 import all from './Texts/all';
 
 export default function AccountSettings() {
-  const [price, setPrice] = useState({ electricityPrice: 1, gasPrice: 1 });
+  const [user] = useContext(UserContext);
   const [lang] = useContext(LanguageContext);
+
+  const [price, setPrice] = useState({ electricityPrice: 1, gasPrice: 1 });
+  const [isDarkMode, setDarkMode] = useState(false);
   const [appliances, setAppliances] = useState([{ applianceName: '', applianceWattage: '' }]);
   const [inputValidity, setInputValidity] = useState(true);
-  const [user] = useContext(UserContext);
   const [preferences, setPreferences] = useState({
     vegetarian: false,
     vegan: false,
@@ -49,8 +51,9 @@ export default function AccountSettings() {
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // prevents page refresh
-    await authApi(user).post(`${URL}/userallergens`, JSON.stringify(preferences));
-    await authApi(user).post(`${URL}/userprice`, JSON.stringify(price));
+    console.log(price);
+    console.log(JSON.stringify(appliances));
+    console.log(JSON.stringify(preferences));
   };
 
   const handleFormChange = (event, element) => {
@@ -96,9 +99,7 @@ export default function AccountSettings() {
   };
 
   const getPreferences = async () => {
-    // const data = await authApi(user).get(`${URL}/userallergens`);
-    // const pref = await data.json();
-    const pref = (await authApi(user).get(`${URL}/userallergens`)).json();
+    const pref = await (await authApi(user).get(`${URL}/userallergens`)).json();
 
     setPreferences({
       vegetarian: pref.Vegetarian,
@@ -113,8 +114,14 @@ export default function AccountSettings() {
     });
   };
 
+  const getEnergyPrice = async () => {
+    const cost = await (await authApi(user).get(`${URL}/userprice`)).json();
+    setPrice(cost.electricityPrice);
+  };
+
   useEffect(() => {
     getPreferences();
+    getEnergyPrice();
   }, []);
 
   useEffect(() => {
@@ -188,6 +195,18 @@ export default function AccountSettings() {
         <Button type="button" color="primary" onClick={addAppliance}>
           +
         </Button>
+        <div className="row">
+          <FormGroup check inline>
+            <Label check>
+              <Input
+                type="checkbox"
+                onChange={(event) => setDarkMode(event.target.checked)}
+                value={isDarkMode}
+              />
+              Dark Mode
+            </Label>
+          </FormGroup>
+        </div>
         <div className="row">
           {Object.keys(preferences).map((preference) => generatePreferenceCheckbox(preference))}
         </div>

@@ -59,4 +59,9 @@ public class EnergyCostAlgorithm : IEnergyCostAlgorithm
         //               hours * kilo
         return Value / 3_600_000;
     }
+
+    void IEnergyCostAlgorithm.ElectricPower(int AppliancePower, float PowerScale, int Time, ApplianceType Type)
+    {
+        throw new NotImplementedException();
+    }
 }

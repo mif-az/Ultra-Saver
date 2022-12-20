@@ -24,8 +24,10 @@ public class UserModel
     public virtual ICollection<UserOwnedApplianceModel> UserOwnedAppliance { get; set; } = null!;
 }
 
-public class UserPriceDTO
+public class UserDTO
 {
+    public bool DarkMode { get; set; } = false;
+
     public float ElectricityPrice { get; set; } = 1;
 
     public float GasPrice { get; set; } = 1;

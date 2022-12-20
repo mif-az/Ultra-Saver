@@ -22,7 +22,7 @@ public class UserPriceController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public IActionResult SetPrice(UserPriceDTO price) //For upserting we need the full model information (id can be ommited for creating a new recipe)
+    public IActionResult SetPrice(UserDTO price) //For upserting we need the full model information (id can be ommited for creating a new recipe)
     {
         string? userEmail = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim();
         var user = _db.User.Find(userEmail);
@@ -30,6 +30,7 @@ public class UserPriceController : ControllerBase
         if (userEmail != null && user != null)
         {
             {
+                user.DarkMode = user.DarkMode;
                 user.ElectricityPrice = price.ElectricityPrice;
                 user.GasPrice = price.GasPrice;
             };

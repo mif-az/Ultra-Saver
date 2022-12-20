@@ -27,6 +27,22 @@ public class RecipeController : ControllerBase
         _energyCostAlgorithm = energyCostAlgorithm;
     }
 
+    [HttpGet("{recipeID}")]
+    public async Task<IActionResult> GetRecipeFromID(int recipeID)
+    {
+        RecipeModel? recipe = _db.Recipes.Find(recipeID);
+
+        if (recipe != null)
+        {
+            return Ok(_db.Recipes.Find(recipeID));
+        }
+        else
+        {
+            return StatusCode(404);
+        }
+
+    }
+
     [HttpGet("stats")]
     public async Task<IActionResult> GetStats()
     {
@@ -64,17 +80,50 @@ public class RecipeController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public IActionResult UpsertRecipe(RecipeModel recipe) //For upserting we need the full model information (id can be ommited for creating a new recipe)
+    public IActionResult UpsertRecipe(RecipeDTO postRequest) //For upserting we need the full model information (id can be ommited for creating a new recipe)
     {
+        RecipeModel recipe = new RecipeModel
+        {
+            Id = postRequest.Id,
+            Owner = postRequest.Owner,
+            Instruction = postRequest.Instruction,
+            CalorieCount = postRequest.CalorieCount,
+            FullPrepTime = postRequest.FullPrepTime, // galima apskaiciuoti ne front'e, o back'e
+            Name = postRequest.Name,
+            ImageData = postRequest.ImageData,
+        };
+
         recipe.Owner = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim() ?? recipe.Owner; // Set recipe owner to current user
         IQueryable<RecipeModel> sameRecipeIdQuery = (from r in _db.Recipes
                                                      where r.Id == recipe.Id
                                                      select r);
 
+        EnergyCostAlgorithm Algorithm = new EnergyCostAlgorithm();
+
+        foreach (var Step in postRequest.Steps){
+            Enum.TryParse(Step.stepAppliance, out ApplianceType a);
+            Algorithm.ElectricPower(1700, Step.stepPowerScale / 10, Step.stepTime, a);
+            recipe.FullPrepTime += Step.stepTime;
+        }
+        recipe.TotalEnergy = Algorithm.TotalEnergy;
 
         if (recipe.Id == 0) // if ID is omitted when creating recipe, it gets automatically set to 0
         {
             _db.Recipes.Add(recipe);
+
+            foreach (var ingredient in postRequest.RecipeIngredient)
+            {
+                RecipeIngredientModel ingredientModel = new RecipeIngredientModel
+                {
+                    RecipeId = recipe.Id,
+                    IngredientName = ingredient.IngredientName,
+                    IngredientAmount = ingredient.IngredientAmount,
+                    IngredientCookingMethod = ingredient.IngredientPreparationMethod,
+                    Recipe = recipe
+                };
+
+                _db.RecipeIngredient.Add(ingredientModel);
+            }
             _db.SaveChanges();
             return Ok();
         }

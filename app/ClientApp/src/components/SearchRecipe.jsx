@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Button, Input, Label } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import { authApi, UserContext } from '../contexts/UserProvider';
 import URL from '../appUrl';
 import all from './Texts/all';
@@ -106,7 +107,7 @@ export default function SearchRecipe({ request, likedRecipes }) {
       setRecipes(data);
     };
     initialFetchData();
-  }, [request, likedRecipes]); // second argument makes useEffect call fetchData() only on first render
+  }, [request, likedRecipes]);
 
   useEffect(() => {
     getEnergyPrice();
@@ -178,7 +179,9 @@ export default function SearchRecipe({ request, likedRecipes }) {
           <div>
             <div className="row border-2 mt-1 bg-dark text-white rounded-1 p-2" key={el.id}>
               <div className="col-6">
-                <div className="fw-bold">{el.name}</div>
+                <Link to={`/r/${el.id}`}>
+                  <div className="fw-bold">{el.name}</div>
+                </Link>
                 <p>~{el.fullPrepTime} minutes to make</p>
                 <p>Short description here (which we dont have)</p>
               </div>

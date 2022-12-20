@@ -14,7 +14,7 @@ public class UserApplianceController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public IActionResult SetAppliance(UserOwnedApplianceModelDTO appliance) //For upserting we need the full model information (id can be ommited for creating a new recipe)
+    public IActionResult SetAppliance(float appliance) //For upserting we need the full model information (id can be ommited for creating a new recipe)
     {
         string? userEmail = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim();
         var user = _db.UserOwnedAppliance.Find(userEmail);
@@ -22,7 +22,7 @@ public class UserApplianceController : ControllerBase
         if (userEmail != null && user != null)
         {
             {
-                user.ApplianceWattage = appliance.ApplianceWattage;
+                // user.ApplianceWattage = appliance.ApplianceWattage;
                 // user.Appliance.CookingMethod = appliance.ApplianceType;
             };
             // _db.User.Update(user);
