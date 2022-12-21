@@ -8,7 +8,7 @@ import URL from '../appUrl';
 import { LanguageContext } from '../contexts/LanguageProvider';
 import all from './Texts/all';
 
-export default function ChatExample() {
+export default function CommunityChat() {
   const [user] = useContext(UserContext);
   const [connection, setConnection] = useState(null);
   const [input, setInput] = useState(null);
