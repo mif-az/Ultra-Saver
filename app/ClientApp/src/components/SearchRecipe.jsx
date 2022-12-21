@@ -80,11 +80,6 @@ export default function SearchRecipe({ request, likedRecipes }) {
   }
 
   const handleLikeRecipe = async (recipe) => {
-    const likedRecipeModel = {
-      userEmail: user.email,
-      recipeId: recipe.id
-    };
-
     if (likedRecipes) {
       await authApi(user).delete(`/userlikedrecipe`, JSON.stringify(likedRecipeModel));
       await handleSearchChange(query);
