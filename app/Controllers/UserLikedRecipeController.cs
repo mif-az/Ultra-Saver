@@ -48,21 +48,22 @@ public class UserLikedRecipeController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public IActionResult LikeRecipe(UserLikedRecipeDTO postRequest)
+    public IActionResult LikeRecipe(int recipeId)
     {
-        var user = _db.User.Find(postRequest.UserEmail);
-        var recipe = _db.Recipes.Find(postRequest.RecipeId);
+        string? userEmail = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim();
 
-        if (user == null || recipe == null)
+        var user = _db.User.Find(userEmail);
+        var recipe = _db.Recipes.Find(recipeId);
+
+        if (user == null || recipe == null || userEmail == null)
         {
             return BadRequest();
         }
 
         UserLikedRecipeModel recipeModel = new UserLikedRecipeModel
         {
-            Id = postRequest.Id,
-            UserEmail = postRequest.UserEmail,
-            RecipeId = postRequest.RecipeId,
+            UserEmail = userEmail, // to avoid warning, not sure if thats the best way
+            RecipeId = recipeId,
             User = user,
             Recipe = recipe
         };
@@ -93,17 +94,22 @@ public class UserLikedRecipeController : ControllerBase
 
     [HttpDelete]
     [Authorize]
-    public IActionResult UnlikeRecipe(UserLikedRecipeDTO recipeDTO)
+    public IActionResult UnlikeRecipe(int recipeId)
     {
-        UserLikedRecipeModel likedRecipeModel;
+        string? userEmail = (HttpContext.User.Identity as ClaimsIdentity)?.getEmailFromClaim();
+
+        if (userEmail == null)
+        {
+            return BadRequest("Not logged in");
+        }
 
         try
         {
             IQueryable<UserLikedRecipeModel> existingUserLikedRecipe = (from r in _db.UserLikedRecipe
-                                                                        where r.RecipeId == recipeDTO.RecipeId && r.UserEmail == recipeDTO.UserEmail
+                                                                        where r.RecipeId == recipeId && r.UserEmail == userEmail
                                                                         select r);
 
-            likedRecipeModel = existingUserLikedRecipe.First();
+            UserLikedRecipeModel likedRecipeModel = existingUserLikedRecipe.First();
             _db.Remove(likedRecipeModel);
             _db.SaveChanges();
             return Ok();

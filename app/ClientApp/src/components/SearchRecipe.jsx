@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Button, Input, Label } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import { authApi, UserContext } from '../contexts/UserProvider';
-import URL from '../appUrl';
 import all from './Texts/all';
 import { LanguageContext } from '../contexts/LanguageProvider';
 
@@ -33,8 +33,9 @@ export default function SearchRecipe({ request, likedRecipes }) {
     }
   ];
 
-  async function fetchData(q, page = currentPage) {
-    const response = await authApi(user).get(`${URL}/${request}?page=${page}&filter=${q}`);
+
+  async function fetchData(q) {
+    const response = await authApi(user).get(`/${request}?filter=${q}`);
     const data = await response.json();
     console.log(data);
     return data;
@@ -92,15 +93,10 @@ export default function SearchRecipe({ request, likedRecipes }) {
   }
 
   const handleLikeRecipe = async (recipe) => {
-    const likedRecipeModel = {
-      userEmail: user.email,
-      recipeId: recipe.id
-    };
-
     if (likedRecipes) {
-      await authApi(user).delete(`${URL}/userLikedRecipe`, JSON.stringify(likedRecipeModel));
+      await authApi(user).delete(`/userlikedrecipe`, JSON.stringify(likedRecipeModel));
       await handleSearchChange(query);
-    } else await authApi(user).post(`${URL}/userLikedRecipe`, JSON.stringify(likedRecipeModel));
+    } else await authApi(user).post(`/userlikedrecipe`, JSON.stringify(likedRecipeModel));
   };
 
   // Call fetch data on first render to not have an empty list on start
@@ -111,7 +107,7 @@ export default function SearchRecipe({ request, likedRecipes }) {
       setRecipes(data);
     };
     initialFetchData();
-  }, [request, likedRecipes]); // second argument makes useEffect call fetchData() only on first render
+  }, [request, likedRecipes]);
 
   const likeButton = (el) => {
     if (likedRecipes) {
@@ -179,7 +175,9 @@ export default function SearchRecipe({ request, likedRecipes }) {
           <div>
             <div className="row border-2 mt-1 bg-dark text-white rounded-1 p-2" key={el.id}>
               <div className="col-6">
-                <div className="fw-bold">{el.name}</div>
+                <Link to={`/r/${el.id}`}>
+                  <div className="fw-bold">{el.name}</div>
+                </Link>
                 <p>~{el.fullPrepTime} minutes to make</p>
                 <p>Short description here (which we dont have)</p>
               </div>

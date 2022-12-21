@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import URL from '../../appUrl';
 import { UpdateJwtToken, UserContext } from '../../contexts/UserProvider';
 
 export default function LoggedOutHome() {
@@ -26,7 +25,7 @@ export default function LoggedOutHome() {
       text: 'continue_with'
     });
     const getInfo = async () => {
-      const response = await fetch(`${URL}/recipe/stats`);
+      const response = await fetch(`/recipe/stats`);
       const data = await response.json();
       setInfo(data);
     };
