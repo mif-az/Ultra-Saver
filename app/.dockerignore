@@ -1,0 +1,5 @@
+bin/
+obj/
+out/
+ClientApp/build/
+*/node_modules

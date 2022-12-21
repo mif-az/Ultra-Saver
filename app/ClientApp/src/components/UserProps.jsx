@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect, useState } from 'react';
 import { authApi, UserContext } from '../contexts/UserProvider';
-import URL from '../appUrl';
 
 export default function UserProps() {
   const [user] = useContext(UserContext);
@@ -9,7 +8,7 @@ export default function UserProps() {
   const [tableState, setTableState] = useState({ loading: true, error: false });
 
   async function populateData() {
-    const data = await authApi(user).get(`${URL}/userinfo`);
+    const data = await authApi(user).get(`/userinfo`);
 
     if (data.status !== 200) {
       setTableState({ ...tableState, error: true });
@@ -59,7 +58,7 @@ export default function UserProps() {
         className="btn btn-primary"
         hidden={props.original}
         onClick={async () => {
-          await authApi(user).post(`${URL}/userinfo`, JSON.stringify(props));
+          await authApi(user).post(`/userinfo`, JSON.stringify(props));
           setProps({ ...props, original: true });
         }}>
         Save changes
